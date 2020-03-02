@@ -52,9 +52,14 @@ class EntryHandler(web.RequestHandler):
 
 class IndexHandler(web.RequestHandler):
     def get(self):
+        self.render('index.html')
+
+
+class DashboardHandler(web.RequestHandler):
+    def get(self):
         # Transfer parameters
         items = ['a', 'b', 'c']
-        self.render('index.html', items=items)
+        self.render('dashboard.html', items=items)
 
 
 def make_app():
@@ -62,7 +67,7 @@ def make_app():
     return web.Application(handlers=[
         (r'/', IndexHandler),
         (r'/entry_point/', EntryHandler),
-        (r'/index/', IndexHandler)
+        (r'/dashboard/', DashboardHandler)
     ],
         template_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'),
         static_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static'),
