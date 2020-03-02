@@ -60,7 +60,7 @@ class IndexHandler(web.RequestHandler):
 def make_app():
     # URL
     return web.Application(handlers=[
-        (r'/', MainHandler),
+        (r'/', IndexHandler),
         (r'/entry_point/', EntryHandler),
         (r'/index/', IndexHandler)
     ],

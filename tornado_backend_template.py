@@ -101,14 +101,15 @@ def make_app():
 
 
 if __name__ == '__main__':
+    pass
     # decode start command, use python xx.py --port=xxxx
-    parse_command_line()
+    # parse_command_line()
     # start tornado / application object
-    app = make_app()
+    # app = make_app()
     # listen port
-    app.listen(options.port)
+    # app.listen(options.port)
     # listen to IO instance
-    ioloop.IOLoop.current().start()
+    # ioloop.IOLoop.current().start()
 
 # {% extends 'xx.html' %}
 # head's title: {% block title %}{% end %}
