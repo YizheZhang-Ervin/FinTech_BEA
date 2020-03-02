@@ -4,30 +4,30 @@
 <title>BEA GAS</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link href="{{ static_url('layout/styles/layout.css')}}" rel="stylesheet" type="text/css" media="all">
+<link href="{{ static_url('css/layout.css')}}" rel="stylesheet" type="text/css" media="all">
 </head>
 <body id="top">
 <!-- Begin of page -->
-<div class="bgded" style="background-image:url({{ static_url('images/demo/backgrounds/bg-part0.png') }});">
+<div class="bgded" style="background-image:url({{ static_url('img/homepage/backgrounds/bg-part0.png') }});">
   <nav id="mainav" class="hoc clear">
       <!-- ################################################################################################ -->
       <ul class="clear">
-        <li class="active"><a href="index.html">Home</a></li>
-        <li><a class="drop" href="#">Dashboard</a>
+        <li class="active"><a href="/">Home</a></li>
+        <li><a class="drop" href="">Dashboard</a>
           <ul>
-            <li><a href="#">Tables</a></li>
+            <li><a href="">Tables</a></li>
             <li><a class="drop" href="#">Plots</a>
               <ul>
-                <li><a href="#">Time-Slicing</a></li>
-                <li><a href="#">Animation</a></li>
-                <li><a href="#">3D Plots</a></li>
-                <li><a href="#">DIY Plots</a></li>
+                <li><a href="">Time-Slicing</a></li>
+                <li><a href="">Animation</a></li>
+                <li><a href="">3D Plots</a></li>
+                <li><a href="">DIY Plots</a></li>
               </ul>
             </li>
-            <li><a href="#">Level 2</a></li>
+            <li><a href="">Level 2</a></li>
           </ul>
         </li>
-        <li><a class="drop" href="#">Analysis Blog</a>
+        <li><a class="drop" href="">Analysis Blog</a>
           <ul>
             <li><a href="">Plots/Tables</a></li>
             <li><a href="">Time-Slicing</a></li>
@@ -36,8 +36,8 @@
             <li><a href="">DIY Plots</a></li>
           </ul>
         </li>
-        <li><a href="#">Team</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="#team001">Team</a></li>
+        <li><a href="#contact001">Contact</a></li>
         <li><a href="#">Language</a></li>
       </ul>
       <!-- ################################################################################################ -->
@@ -143,7 +143,7 @@
           </li>
         </ul>
       </div>
-      <div class="one_half"><img class="inspace-10 borderedbox" src="{{ static_url('images/demo/480x400.png') }}" alt=""></div>
+      <div class="one_half"><img class="inspace-10 borderedbox" src="{{ static_url('img/homepage/480x400.png') }}" alt=""></div>
     </div>
     <!-- ################################################################################################ -->
   </section>
@@ -151,7 +151,7 @@
 <!-- ################################################################################################ -->
 
 <!-- Achievements -->
-<div class="wrapper bgded overlay" style="background-image:url({{ static_url('images/demo/backgrounds/02.png') }});">
+<div class="wrapper bgded overlay" style="background-image:url({{ static_url('img/homepage/backgrounds/02.png') }});">
   <section class="hoc container clear"> 
     <!-- ################################################################################################ -->
     <div class="sectiontitle">
@@ -191,7 +191,7 @@
 
 <!-- Team Members -->
 <div class="wrapper row3">
-  <section class="hoc container clear"> 
+  <section class="hoc container clear" id="team001">
     <!-- ################################################################################################ -->
     <div class="sectiontitle">
       <h6 class="heading">Team</h6>
@@ -199,7 +199,7 @@
     </div>
     <div class="group latest">
       <article class="one_third first">
-        <figure><a class="imgover" href="#"><img src="{{ static_url('images/demo/ervin.jpg') }}" alt=""></a></figure>
+        <figure><a class="imgover" href="#"><img src="{{ static_url('img/homepage/ervin.jpg') }}" alt=""></a></figure>
         <h4 class="heading">Yizhe(Ervin) Zhang</h4>
         <ul class="nospace meta">
           <li><i class="fa fa-user"></i> <a href="#">Director</a></li>
@@ -210,7 +210,7 @@
         <footer><a href="https://ervinzhang.pythonanywhere.com">Personal Website</a><br><a href="#">Linkedin</a></footer>
       </article>
       <article class="one_third">
-        <figure><a class="imgover" href="#"><img src="{{ static_url('images/demo/kinghe.jpg')}}" alt=""></a></figure>
+        <figure><a class="imgover" href="#"><img src="{{ static_url('img/homepage/kinghe.jpg')}}" alt=""></a></figure>
         <h4 class="heading">Shijie(King) He</h4>
         <ul class="nospace meta">
           <li><i class="fa fa-user"></i> <a href="#">Director</a></li>
@@ -221,7 +221,7 @@
         <footer><a href="#">Linkedin</a></footer>
       </article>
       <article class="one_third">
-        <figure><a class="imgover" href="#"><img src="{{ static_url('images/demo/colin.jpg') }}" alt=""></a></figure>
+        <figure><a class="imgover" href="#"><img src="{{ static_url('img/homepage/colin.jpg') }}" alt=""></a></figure>
         <h4 class="heading">Xuankui(Colin) Shi</h4>
         <ul class="nospace meta">
           <li><i class="fa fa-user"></i> <a href="#">Director</a></li>
@@ -238,7 +238,7 @@
 <!-- ################################################################################################ -->
 
 <!-- Contact -->
-<div class="wrapper row4 bgded overlay" style="background-image:url('{{ static_url('images/demo/backgrounds/03.png') }});">
+<div id="contact001" class="wrapper row4 bgded overlay" style="background-image:url('{{ static_url('img/homepage/backgrounds/03.png') }});">
   <footer id="footer" class="hoc clear"> 
     <!-- ################################################################################################ -->
     <div class="one_third first">
@@ -302,8 +302,8 @@
 <!-- ################################################################################################ -->
 
 <!-- JAVASCRIPTS -->
-<script src="{{ static_url('layout/scripts/jquery.min.js') }}"></script>
-<script src="{{ static_url('layout/scripts/jquery.backtotop.js') }}"></script>
-<script src="{{ static_url('layout/scripts/jquery.mobilemenu.js') }}"></script>
+<script src="{{ static_url('js/jquery.min.js') }}"></script>
+<script src="{{ static_url('js/jquery.backtotop.js') }}"></script>
+<script src="{{ static_url('js/jquery.mobilemenu.js') }}"></script>
 </body>
 </html>
