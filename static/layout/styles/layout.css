@@ -25,7 +25,7 @@ File: Layout CSS
 #pageintro{padding:250px 0; text-align:center;}
 
 #pageintro article{display:block; max-width:65%; margin:0 auto;}
-#pageintro .heading{margin-bottom:20px; font-size:4rem;}
+#pageintro .heading{margin-bottom:20px; font-size:4rem;background-color:rgba(0,0,0,0.8);}
 #pageintro p:first-of-type{margin:0 0 20px 0; text-transform:uppercase; font-size:1.2rem; letter-spacing:5px;}
 #pageintro footer{margin-top:50px;}
 
@@ -232,7 +232,7 @@ input:focus, textarea:focus, *:required:focus{border-color:#9D8D65;}
 .overlay::after{color:inherit; background-color:rgba(0,0,0,.4);}
 
 .btn, .btn.inverse:hover{color:#FFFFFF; background-color:#9D8D65; border-color:#9D8D65;}
-.btn:hover, .btn.inverse{color:inherit; background-color:transparent; border-color:inherit;}
+.btn:hover, .btn.inverse{color:inherit; background-color:rgba(0,0,0,0.8); border-color:inherit;}
 
 .icon{color:#FFFFFF; background-color:#9D8D65; border-color:inherit;}
 .icon:hover{color:#9D8D65; background-color:#FFFFFF;}
@@ -242,20 +242,20 @@ input:focus, textarea:focus, *:required:focus{border-color:#9D8D65;}
 
 
 /* Rows */
-.row1{color:#8F8F8F; background-color:rgba(0,0,0,.55);}
+.row1{color:gold; background-color:rgba(0,0,0,.55);}
 .row2{color:#4A4A4A; background-color:#F2F2F2;}
 .row3{color:#4A4A4A; background-color:#FFFFFF;}
 .row4{color:#CBCBCB;}
-.row5, .row5 a{color:#CBCBCB; background-color:#000000;}
+.row5, .row5 a{color:gold; background-color:#000000;}
 
 
 /* Page Intro */
-#pageintro{color:#FFFFFF;}
+#pageintro{color:gold;}
 
 
 /* Header */
 #header a{color:inherit;}
-#header #logo a{color:#D7D7D7;}
+#header #logo a{color:gold;}
 
 
 /* Content Area */
@@ -274,12 +274,12 @@ input:focus, textarea:focus, *:required:focus{border-color:#9D8D65;}
 
 
 /* Navigation */
-#mainav{color:#FFFFFF; background-color:#9D8D65;}
-#mainav li a{color:inherit;}
-#mainav .active a, #mainav a:hover, #mainav li:hover > a{color:#413C29; background-color:inherit;}
-#mainav li li a, #mainav .active li a{color:#FFFFFF; background-color:rgba(157,141,101,.65);/* #9D8D65 */ border-color:#9D8D65;}
-#mainav li li:hover > a, #mainav .active .active > a{color:#FFFFFF; background-color:#9D8D65;}
-#mainav form select{color:#FFFFFF; background-color:#413C29;}
+#mainav{color:#FFFFFF; background-color:transparent;position:fixed;}
+#mainav li a{color:gold;}
+#mainav .active a, #mainav a:hover, #mainav li:hover > a{color:gold; background-color:inherit;}
+#mainav li li a, #mainav .active li a{color:gold; background-color:rgba(157,141,101,0.9);/* #9D8D65 */ border-color:#9D8D65;}
+#mainav li li:hover > a, #mainav .active .active > a{color:gold; background-color:#9D8D65;}
+#mainav form select{color:gold; background-color:#413C29;}
 
 #breadcrumb *{color:#FFFFFF;}
 #breadcrumb li:last-child a{}
@@ -356,7 +356,7 @@ table a, #comments a{background-color:inherit;}
 
 	#pageintro{padding:120px 0;}
 	#pageintro article{max-width:none; text-align:left;}
-	#pageintro .heading{font-size:2rem;}
+	#pageintro .heading{font-size:2rem;background-color:rgba(0,0,0,0.8);}
 
 	.sectiontitle{max-width:none; text-align:left;}
 
