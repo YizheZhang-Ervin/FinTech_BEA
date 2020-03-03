@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="">
 <head>
-<title>BEA GAS</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link href="{{ static_url('css/layout.css')}}" rel="stylesheet" type="text/css" media="all">
+  <title>BEA GAS</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="{{ static_url('css/layout.css')}}" rel="stylesheet" type="text/css" media="all">
+  <link rel="shortcut icon" href="{{ static_url('img/homepage/favicon.ico') }}">
 </head>
 <body id="top">
 <!-- Begin of page -->
@@ -15,12 +16,12 @@
         <li class="active"><a href="/">Home</a></li>
         <li><a class="drop" href="/dashboard/">Dashboard</a>
           <ul>
-            <li><a href="">Tables</a></li>
+            <li><a href="/dashboard/?time=tables">Tables</a></li>
             <li><a class="drop" href="/dashboard/">Plots</a>
               <ul>
-                <li><a href="/dashboard/">Time-Slicing</a></li>
-                <li><a href="/dashboard/">Animation</a></li>
-                <li><a href="/dashboard/">3D Plots</a></li>
+                <li><a href="/dashboard/?time=1week">Time-Slicing</a></li>
+                <li><a href="/dashboard/?type=1line-animation">Animation</a></li>
+                <li><a href="/dashboard/?type=3d">3D Plots</a></li>
                 <li><a href="/dashboard/">DIY Plots</a></li>
               </ul>
             </li>
