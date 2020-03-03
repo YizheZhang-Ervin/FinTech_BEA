@@ -52,7 +52,7 @@
 </div>
 <!-- ################################################################################################ -->
 
-<!-- Left Navigation -->
+<!-- Main Part -->
 <div class="wrapper row3">
   <main class="hoc container clear">
     <!-- left part -->
@@ -61,25 +61,25 @@
       <!-- Menu -->
       <nav class="sdb_holder">
         <ul>
-          <li><a href="">Tables</a></li>
-          <li><a href="">Plots</a>
+          <li><a href="?time=tables">Tables</a></li>
+          <li><a >Plots</a>
             <ul>
-              <li><a href="">Time-Slicing</a></li>
+              <li><a >Time-Slicing</a></li>
                 <ul>
-                  <li><a href="">Days</a></li>
-                  <li><a href="">1 Week</a></li>
-                  <li><a href="">2 Weeks</a></li>
-                  <li><a href="">3 Weeks</a></li>
-                  <li><a href="">1 Month</a></li>
-                  <li><a href="">2 Months</a></li>
-                  <li><a href="">3 Months</a></li>
+                  <li><a href="?time=days">Days</a></li>
+                  <li><a href="?time=1week">1 Week</a></li>
+                  <li><a href="?time=2weeks">2 Weeks</a></li>
+                  <li><a href="?time=3weeks">3 Weeks</a></li>
+                  <li><a href="?time=1month">1 Month</a></li>
+                  <li><a href="?time=2months">2 Months</a></li>
+                  <li><a href="?time=3months">3 Months</a></li>
                 </ul>
-              <li><a href="">Animation</a></li>
+              <li><a >Animation</a></li>
                 <ul>
-                  <li><a href="">Single-Line Animation</a></li>
-                  <li><a href="">Multi-Line Animation</a></li>
+                  <li><a href="?type=1line-animation">Single-Line Animation</a></li>
+                  <li><a >Multi-Line Animation</a></li>
                 </ul>
-              <li><a href="">3D Plots</a></li>
+              <li><a href="?type=3d">3D Plots</a></li>
               <li><a href="">DIY Plots</a></li>
             </ul>
           </li>
@@ -116,7 +116,9 @@
     </div>
     <!-- center part -->
     <div class="content three_quarter"> 
-      <!-- ################################################################################################ -->
+      <embed id="time001" src="data:image/png;base64,{{time}}" />
+      <div id="animation001">{% raw type %}</div>
+      <!--
       <h1>Article Title</h1>
       <img class="imgr borderedbox inspace-5" src="{{static_url('img/homepage/imgr.gif')}}" alt="">
       <p>introduce</p>
@@ -125,6 +127,7 @@
       <p>introduce<a href="" title="Free Website Templates">introduce</a>introduce<a href="">introduce</a>.</p>
       <p>introduce<a href="">introduce</a>introduce</p>
       <p>introduce</p>
+
       <h1>Table(s)</h1>
       <div class="scrollable">
         <table>
@@ -164,6 +167,7 @@
           </tbody>
         </table>
       </div>
+
       <div id="comments">
         <h2>Comments</h2>
         <ul>
@@ -235,7 +239,7 @@
           </div>
         </form>
       </div>
-      <!-- ################################################################################################ -->
+      -->
     </div>
 
     <div class="clear"></div>
@@ -255,6 +259,7 @@
 <!-- ################################################################################################ -->
 
 <!-- JAVASCRIPTS -->
+<script src="{{ static_url('js/diy.js') }}"></script>
 <script src="{{ static_url('js/jquery.min.js') }}"></script>
 <script src="{{ static_url('js/jquery.backtotop.js') }}"></script>
 <script src="{{ static_url('js/jquery.mobilemenu.js') }}"></script>

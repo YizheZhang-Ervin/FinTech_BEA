@@ -10,7 +10,7 @@ File: Layout CSS
 
 @import url("font-awesome.min.css");
 @import url("framework.css");
-
+@import url("diy.css");
 /* Rows
 --------------------------------------------------------------------------------------------------------------- */
 .row1, .row1 a{}
@@ -281,7 +281,7 @@ input:focus, textarea:focus, *:required:focus{border-color:#9D8D65;}
 #mainav li li:hover > a, #mainav .active .active > a{color:gold; background-color:#9D8D65;}
 #mainav form select{color:gold; background-color:#413C29;}
 
-#breadcrumb *{color:#FFFFFF;}
+#breadcrumb *{color:gold;}
 #breadcrumb li:last-child a{}
 
 .container .sidebar nav a{color:inherit; border-color:#D7D7D7;}
