@@ -41,7 +41,7 @@ if __name__ == '__main__':
         # start tornado
         app = make_app_deploy()
         # listen on port
-        app.listen(80)
+        app.listen(options.port)
 
     # listen to IO instance
     ioloop.IOLoop.current().start()
