@@ -63,7 +63,6 @@ class DashboardHandler(web.RequestHandler):
     def get(self, *args, **kwargs):
         currenttime = getorigintime()
         name = ''
-        diychart = ''
         try:
             action = self.get_query_argument('time', '')
             action2 = self.get_query_argument('type', '')
@@ -113,11 +112,15 @@ class DashboardHandler(web.RequestHandler):
             type = ''
 
         # Transfer parameters
-        self.render('dashboard.html', time=time, type=type, name=name, diychart=diychart)
+        self.render('dashboard.html', time=time, type=type, name=name, diychart='')
 
     def post(self, **kwargs):
         date001 = self.get_body_argument('date001', '')
         name001 = self.get_body_argument('name001', '')
         data001 = self.get_body_arguments('data001', '')
-        diychart = plot_diy(date001, name001, *data001)
-        self.render('dashboard.html', time='', type='', name='', diychart=diychart)
+        try:
+            diychart = plot_diy(date001, name001, *data001)
+            self.render('dashboard.html', time='', type='', name='', diychart=diychart)
+        except Exception:
+            self.render('dashboard.html', time='', type='', name='', diychart='')
+
