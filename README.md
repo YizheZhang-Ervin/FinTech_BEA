@@ -1,5 +1,15 @@
-# BEA
-Black Eight Agency-Gold Analysis System
-
-please start by tornado_start.py  
-don't use tornado_backend_template.py  
+# BEA  
+**Black Eight Agency-Gold Analysis System**  
+  
+## Before Run this Project  
+* please install the required python lib  
+    pip install -r requirements.txt
+  
+## Run Project Instruction
+Run By Terminal:
+#### For development:  
+* this mode will listen on port: 8000  
+    BEA path > python manage.py --env=develop  
+#### For deployment and produce:  
+* this mode will listen on port: 80  
+    BEA path > python manage.py --env=deploy  

@@ -48,9 +48,9 @@ class EntryHandler(web.RequestHandler):
         self.conn.close()
 
 
-class CameraHandler(web.RequestHandler):
+class ToolsHandler(web.RequestHandler):
     def get(self):
-        self.render('mirror.html')
+        self.render('tools.html')
 
 
 class IndexHandler(web.RequestHandler):

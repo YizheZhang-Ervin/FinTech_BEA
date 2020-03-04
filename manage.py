@@ -1,7 +1,7 @@
 import os
 from tornado import ioloop, web
 from tornado.options import define, options, parse_command_line
-from GoldAnalysisSystem.views import IndexHandler, DashboardHandler, EntryHandler, CameraHandler
+from GoldAnalysisSystem.views import IndexHandler, DashboardHandler, EntryHandler, ToolsHandler
 
 define('port', default='8000', type=int)
 define('env', default='develop', type=str)
@@ -13,7 +13,7 @@ def make_app():
         (r'/', IndexHandler),
         (r'/dashboard/', DashboardHandler),
         (r'/entry_point/', EntryHandler),
-        (r'/mirror/', CameraHandler),
+        (r'/tools/', ToolsHandler),
 
     ],
         template_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'),
