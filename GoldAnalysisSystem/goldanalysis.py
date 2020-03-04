@@ -14,6 +14,20 @@ from mpl_toolkits.mplot3d import Axes3D
 register_matplotlib_converters()
 
 
+def time_judge(time, data, move_type):
+    while True:
+        if time in data.index:
+            return str(time)
+        else:
+            b = datetime.datetime.strptime(time, "%Y-%m-%d")
+            if move_type == 'back':
+                c = b + datetime.timedelta(days=-1)
+                time = c.strftime("%Y-%m-%d")
+            elif move_type == 'forward':
+                c = b + datetime.timedelta(days=1)
+                time = c.strftime("%Y-%m-%d")
+
+
 def getorigintime():
     tz_sh = tz.gettz('Asia/Shanghai')
     now = datetime.datetime.now(tz=tz_sh)
@@ -53,7 +67,9 @@ def getcurrentdata():
 def plot_price_trend(time, name):
     golddata = getdata()
     currenttime_ymd = str(gettime())
-    data = golddata.loc[str(time):currenttime_ymd, ['Open', 'Close', 'High', 'Low', 'Settle']]
+    start = time_judge(time, golddata, 'forward')
+    end = time_judge(currenttime_ymd, golddata, 'back')
+    data = golddata.loc[start:end, ['Open', 'Close', 'High', 'Low', 'Settle']]
     x = data.index
     y_open = data['Open'].values
     y_close = data['Close'].values
@@ -103,7 +119,9 @@ def plot_price_trend(time, name):
 def plot_price_table(time, name):
     golddata = getdata()
     currenttime_ymd = str(gettime())
-    data = golddata.loc[str(time):currenttime_ymd, ['Open', 'Close', 'High', 'Low', 'Settle']]
+    start = time_judge(time, golddata, 'forward')
+    end = time_judge(currenttime_ymd, golddata, 'back')
+    data = golddata.loc[start:end, ['Open', 'Close', 'High', 'Low', 'Settle']]
     plt.figure()
     ax = plt.gca()
     ax.spines['top'].set_color('none')
@@ -241,11 +259,13 @@ def plot_diy(time, name, *datatype):
     columns = list(datatype)
     golddata = getdata()
     currenttime_ymd = str(gettime())
-    data = golddata.loc[str(time):currenttime_ymd, columns]
+    start = time_judge(time, golddata, 'forward')
+    end = time_judge(currenttime_ymd, golddata, 'back')
+    data = golddata.loc[start:end, columns]
     x = data.index
-
     plt.title(name, color='Navy', fontsize='large', fontweight='bold')
     plt.figure(dpi=300)
+
     # border of axis x and y
     ax = plt.gca()
     ax.spines['top'].set_color('none')
@@ -253,16 +273,9 @@ def plot_diy(time, name, *datatype):
     ax.spines['left'].set_color('Navy')
     ax.spines['right'].set_color('none')
 
-    # diy plot
-    for i in columns:
-        if i == 'Settle':
-            plt.plot(x, data[i].values, label=i + ' Price', marker='.')
-        elif i == 'High' or i == 'Low':
-            plt.plot(x, data[i].values, label=i + ' Price', ls='--')
-        else:
-            plt.plot(x, data[i].values, label=i+' Price')
     # change axis value for longer than 1 month
-    if name == '2months' or name == '3months':
+    delta = datetime.datetime.strptime(end, "%Y-%m-%d") - datetime.datetime.strptime(start, "%Y-%m-%d")
+    if delta.days > 30:
         x_display = []
         for index, value in enumerate(x):
             if index % 7 == 0:
@@ -273,6 +286,15 @@ def plot_diy(time, name, *datatype):
         x_display = []
         for index, value in enumerate(x):
             x_display.append(value.strftime('%m-%d'))
+
+    # diy plot
+    for i in columns:
+        if i == 'Settle':
+            plt.plot(x, data[i].values, label=i + ' Price', marker='.')
+        elif i == 'High' or i == 'Low':
+            plt.plot(x, data[i].values, label=i + ' Price', ls='--')
+        else:
+            plt.plot(x, data[i].values, label=i + ' Price')
     # axis x and y
     plt.xticks(x, x_display, color='Navy', rotation='45')
     plt.yticks(color='Navy')
