@@ -1,13 +1,8 @@
 import datetime
-import os
-
 import pymysql
-from tornado import ioloop, web
-from tornado.options import define, options, parse_command_line
-
-from goldanalysis import getorigintime, plot_price_trend, plot_price_table, gettime, plot_animation, plot_3D
-
-define('port', default='8000', type=int)
+from tornado import web
+from GoldAnalysisSystem.goldanalysis import plot_price_trend, gettime, plot_price_table, getorigintime, plot_animation, \
+    plot_3D
 
 
 class MainHandler(web.RequestHandler):
@@ -51,6 +46,11 @@ class EntryHandler(web.RequestHandler):
     def on_finish(self):
         # execute at last
         self.conn.close()
+
+
+class CameraHandler(web.RequestHandler):
+    def get(self):
+        self.render('mirror.html')
 
 
 class IndexHandler(web.RequestHandler):
@@ -108,27 +108,3 @@ class DashboardHandler(web.RequestHandler):
 
         # Transfer parameters
         self.render('dashboard.html', time=time, type=type)
-
-
-def make_app():
-    # URL
-    return web.Application(handlers=[
-        (r'/', IndexHandler),
-        (r'/dashboard/', DashboardHandler),
-        (r'/entry_point/', EntryHandler),
-
-    ],
-        template_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'),
-        static_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static'),
-    )
-
-
-if __name__ == '__main__':
-    # decode start command, use python xx.py --port=xxxx
-    parse_command_line()
-    # start tornado / application object
-    app = make_app()
-    # listen port
-    app.listen(options.port)
-    # listen to IO instance
-    ioloop.IOLoop.current().start()

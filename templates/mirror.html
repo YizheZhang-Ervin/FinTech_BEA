@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <title>BEA GAS Tools - Mirror</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="{{ static_url('css/layout.css')}}" rel="stylesheet" type="text/css" media="all">
+  <link rel="shortcut icon" href="{{ static_url('img/homepage/favicon.ico') }}">
+</head>
+<body id="top">
+<!-- Begin of page -->
+<div class="bgded" style="background-image:url({{static_url('img/homepage/backgrounds/bg-part0.png')}});">
+  <div class="wrapper row1">
+    <nav id="mainav" class="hoc clear">
+      <ul class="clear">
+        <li><a href="/">Home</a></li>
+      </ul>
+    </nav>
+    <header id="header" class="hoc clear">
+      <div id="logo" class="fl_left">
+        <h1><a href="/">BEA</a></h1>
+        <p>Gold Analysis System</p>
+      </div>
+      <div id="quickinfo" class="fl_right">
+        <ul class="nospace inline">
+          <li><strong>Precious Metal</strong><br>
+            Au Ag Pt Pd Ru Rh Os Ir</li>
+          <li><strong>Gold</strong><br>
+            18K 20K 22K 24K</li>
+        </ul>
+      </div>
+    </header>
+
+  </div>
+  <!-- ################################################################################################ -->
+  <!-- ################################################################################################ -->
+  <!-- ################################################################################################ -->
+  <div class="wrapper">
+    <div id="breadcrumb" class="hoc clear">
+      <!-- ################################################################################################ -->
+      <h6 class="heading">Gold Analysis System</h6>
+      <!-- ################################################################################################ -->
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard/">Tools</a></li>
+      </ul>
+      <!-- ################################################################################################ -->
+    </div>
+  </div>
+  <!-- ################################################################################################ -->
+</div>
+
+<!-- Main Part -->
+<div class="wrapper row3">
+  <main class="hoc container clear">
+      <!-- left part -->
+    <div class="sidebar one_quarter first leftpart">
+      <h6>Menu</h6>
+      <!-- Menu -->
+      <nav class="sdb_holder">
+        <ul>
+            <li><a><button onclick="getMedia()" style="border:0px;background:transparent">Open Mirror</button></a></li>
+            <li><a><button onclick="takePhoto()" style="border:0px;background:transparent">Take picture</button></a></li>
+        </ul>
+      </nav>
+    </div>
+    <!-- center part -->
+    <div class="content three_quarter">
+      <video id="video" width="350px" height="350px" autoplay="autoplay" style="display:inline;border:1px dashed gray"></video>
+      <canvas id="canvas" width="350px" height="350px" style="display:inline;border:1px dotted gray"></canvas>
+    </div>
+    <div class="clear"></div>
+  </main>
+</div>
+
+<!-- end of page-->
+<div class="wrapper row5">
+  <div id="copyright" class="hoc clear">
+    <!-- Copyright &copy; 2020 - All Rights Reserved - xxx -->
+    <p class="fl_left"><a href="/">Black Eight Agency</a></p>
+    <p class="fl_right"><a target="_blank" href="/">Gold Analysis System</a></p>
+  </div>
+</div>
+<a id="backtotop" href="#top"><i class="fa fa-chevron-up"></i></a>
+
+<!-- JAVASCRIPTS -->
+<script src="{{ static_url('js/diy.js') }}"></script>
+<script src="{{ static_url('js/jquery.min.js') }}"></script>
+<script src="{{ static_url('js/jquery.backtotop.js') }}"></script>
+<script src="{{ static_url('js/jquery.mobilemenu.js') }}"></script>
+<script src="{{static_url('js/mirror.js')}}"></script>
+</body>
+</html>
