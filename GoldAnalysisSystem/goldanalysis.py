@@ -97,7 +97,7 @@ def plot_price_trend(time, name):
     buf = BytesIO()
     plt.savefig(buf, transparent=True, format='png')
     data = base64.b64encode(buf.getbuffer()).decode("ascii")
-    return data
+    return data, name
 
 
 def plot_price_table(time, name):
@@ -126,7 +126,7 @@ def plot_price_table(time, name):
     buf = BytesIO()
     plt.savefig(buf, transparent=True, format='png')
     data = base64.b64encode(buf.getbuffer()).decode("ascii")
-    return data
+    return data, name
 
 
 def plot_3D(name):
@@ -166,7 +166,7 @@ def plot_3D(name):
     buf = BytesIO()
     plt.savefig(buf, transparent=True, format='png')
     data = base64.b64encode(buf.getbuffer()).decode("ascii")
-    return data
+    return data, name
 
 
 def plot_animation(name):
@@ -234,7 +234,58 @@ def plot_animation(name):
     # ani.save(saveplace, savefig_kwargs={'transparent': True}, writer='imagemagick')
     # plt.savefig(saveplace, transparent=True)
     # return ani.to_html5_video()
-    return ani.to_jshtml()
+    return ani.to_jshtml(), name
+
+
+def plot_diy(time, name, *datatype):
+    columns = list(datatype)
+    golddata = getdata()
+    currenttime_ymd = str(gettime())
+    data = golddata.loc[str(time):currenttime_ymd, columns]
+    x = data.index
+
+    plt.title(name, color='Navy', fontsize='large', fontweight='bold')
+    plt.figure(dpi=300)
+    # border of axis x and y
+    ax = plt.gca()
+    ax.spines['top'].set_color('none')
+    ax.spines['bottom'].set_color('Navy')
+    ax.spines['left'].set_color('Navy')
+    ax.spines['right'].set_color('none')
+
+    # diy plot
+    for i in columns:
+        if i == 'Settle':
+            plt.plot(x, data[i].values, label=i + ' Price', marker='.')
+        elif i == 'High' or i == 'Low':
+            plt.plot(x, data[i].values, label=i + ' Price', ls='--')
+        else:
+            plt.plot(x, data[i].values, label=i+' Price')
+    # change axis value for longer than 1 month
+    if name == '2months' or name == '3months':
+        x_display = []
+        for index, value in enumerate(x):
+            if index % 7 == 0:
+                x_display.append(value.strftime('%m-%d'))
+            else:
+                x_display.append('')
+    else:
+        x_display = []
+        for index, value in enumerate(x):
+            x_display.append(value.strftime('%m-%d'))
+    # axis x and y
+    plt.xticks(x, x_display, color='Navy', rotation='45')
+    plt.yticks(color='Navy')
+    plt.legend()
+    # pwd = os.path.dirname(os.path.dirname(__file__))
+    # saveplace = pwd + '/static/pfas/img/' + name + '.png'
+    # plt.savefig(saveplace, transparent=True)
+    # use ascii save and load png
+    # put this in html :<embed id="pic0" src="data:image/png;base64,{{pic_1}}" />
+    buf = BytesIO()
+    plt.savefig(buf, transparent=True, format='png')
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    return data
 
 
 if __name__ == '__main__':

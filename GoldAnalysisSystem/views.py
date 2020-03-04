@@ -1,8 +1,9 @@
 import datetime
 import pymysql
 from tornado import web
+
 from GoldAnalysisSystem.goldanalysis import plot_price_trend, gettime, plot_price_table, getorigintime, plot_animation, \
-    plot_3D
+    plot_3D, plot_diy
 
 
 class MainHandler(web.RequestHandler):
@@ -61,6 +62,8 @@ class IndexHandler(web.RequestHandler):
 class DashboardHandler(web.RequestHandler):
     def get(self, *args, **kwargs):
         currenttime = getorigintime()
+        name = ''
+        diychart = ''
         try:
             action = self.get_query_argument('time', '')
             action2 = self.get_query_argument('type', '')
@@ -70,41 +73,51 @@ class DashboardHandler(web.RequestHandler):
         if action == 'days' or action == 'tables':
             # 1 week table
             aweek_table = (currenttime - datetime.timedelta(days=6)).strftime('%Y-%m-%d')
-            time = plot_price_table(aweek_table, gettime())
+            time, name = plot_price_table(aweek_table, gettime())
         elif action == '1week':
             # 1 week
             aweek = (currenttime - datetime.timedelta(days=7)).strftime('%Y-%m-%d')
-            time = plot_price_trend(aweek, '1week')
+            time, name = plot_price_trend(aweek, '1week')
         elif action == '2weeks':
             # 2 weeks
             twoweeks = (currenttime - datetime.timedelta(days=14)).strftime('%Y-%m-%d')
-            time = plot_price_trend(twoweeks, '2weeks')
+            time, name = plot_price_trend(twoweeks, '2weeks')
         elif action == '3weeks':
             # 3 weeks
             threeweeks = (currenttime - datetime.timedelta(days=21)).strftime('%Y-%m-%d')
-            time = plot_price_trend(threeweeks, '3weeks')
+            time, name = plot_price_trend(threeweeks, '3weeks')
         elif action == '1month':
             # 1 month
             onemonth = (currenttime - datetime.timedelta(days=30)).strftime('%Y-%m-%d')
-            time = plot_price_trend(onemonth, '1month')
+            time, name = plot_price_trend(onemonth, '1month')
         elif action == '2months':
             # 2 months
             twomonths = (currenttime - datetime.timedelta(days=60)).strftime('%Y-%m-%d')
-            time = plot_price_trend(twomonths, '2months')
+            time, name = plot_price_trend(twomonths, '2months')
         elif action == '3months':
             # 3 months
             threemonths = (currenttime - datetime.timedelta(days=90)).strftime('%Y-%m-%d')
-            time = plot_price_trend(threemonths, '3months')
+            time, name = plot_price_trend(threemonths, '3months')
         elif action == '':
             time = ''
 
         if action2 == '1line-animation':
-            type = plot_animation('allin_animation')
+            type, name = plot_animation('All time animation')
         elif action2 == '3d':
-            time = plot_3D('allin_3D')
+            time, name = plot_3D('All time 3D')
             type = ''
+        elif action2 == 'diy':
+            type = ''
+            name = 'Please select Date/Data which you need to analyze'
         else:
             type = ''
 
         # Transfer parameters
-        self.render('dashboard.html', time=time, type=type)
+        self.render('dashboard.html', time=time, type=type, name=name, diychart=diychart)
+
+    def post(self, **kwargs):
+        date001 = self.get_body_argument('date001', '')
+        name001 = self.get_body_argument('name001', '')
+        data001 = self.get_body_arguments('data001', '')
+        diychart = plot_diy(date001, name001, *data001)
+        self.render('dashboard.html', time='', type='', name='', diychart=diychart)

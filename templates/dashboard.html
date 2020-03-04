@@ -79,7 +79,7 @@
                   <li><a >Multi-Line Animation</a></li>
                 </ul>
               <li><a href="?type=3d">3D Plots</a></li>
-              <li><a href="">DIY Plots</a></li>
+              <li><a href="?type=diy">DIY Plots</a></li>
             </ul>
           </li>
         </ul>
@@ -114,131 +114,29 @@
       </div>
     </div>
     <!-- center part -->
-    <div class="content three_quarter"> 
+    <div class="content three_quarter">
+      <p id="title001" style="font-size:20px;font-weight:bold;">{{name}}</p>
+      <hr>
       <embed id="time001" src="data:image/png;base64,{{time}}" />
       <div id="animation001">{% raw type %}</div>
-      <!--
-      <h1>Article Title</h1>
-      <img class="imgr borderedbox inspace-5" src="{{static_url('img/homepage/imgr.gif')}}" alt="">
-      <p>introduce</p>
-      <p>introduce<a href="#">introduce</a>introduce</p>
-      <img class="imgl borderedbox inspace-5" src="{{static_url('img/homepage/imgl.gif')}}" alt="">
-      <p>introduce<a href="" title="Free Website Templates">introduce</a>introduce<a href="">introduce</a>.</p>
-      <p>introduce<a href="">introduce</a>introduce</p>
-      <p>introduce</p>
-
-      <h1>Table(s)</h1>
-      <div class="scrollable">
-        <table>
-          <thead>
-            <tr>
-              <th>Header 1</th>
-              <th>Header 2</th>
-              <th>Header 3</th>
-              <th>Header 4</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><a href="#">Value 1</a></td>
-              <td>Value 2</td>
-              <td>Value 3</td>
-              <td>Value 4</td>
-            </tr>
-            <tr>
-              <td>Value 5</td>
-              <td>Value 6</td>
-              <td>Value 7</td>
-              <td><a href="#">Value 8</a></td>
-            </tr>
-            <tr>
-              <td>Value 9</td>
-              <td>Value 10</td>
-              <td>Value 11</td>
-              <td>Value 12</td>
-            </tr>
-            <tr>
-              <td>Value 13</td>
-              <td><a href="#">Value 14</a></td>
-              <td>Value 15</td>
-              <td>Value 16</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div id="comments">
-        <h2>Comments</h2>
-        <ul>
-          <li>
-            <article>
-              <header>
-                <figure class="avatar"><img src="{{static_url('img/homepage/avatar.png')}}" alt=""></figure>
-                <address>
-                By <a href="#">A Name</a>
-                </address>
-                <time datetime="2045-04-06T08:15+00:00">Friday, 6<sup>th</sup> April 2045 @08:15:00</time>
-              </header>
-              <div class="comcont">
-                <p>introduce</p>
-              </div>
-            </article>
-          </li>
-          <li>
-            <article>
-              <header>
-                <figure class="avatar"><img src="{{static_url('img/homepage/avatar.png')}}" alt=""></figure>
-                <address>
-                By <a href="#">A Name</a>
-                </address>
-                <time datetime="2045-04-06T08:15+00:00">Friday, 6<sup>th</sup> April 2045 @08:15:00</time>
-              </header>
-              <div class="comcont">
-                <p>introduce</p>
-              </div>
-            </article>
-          </li>
-          <li>
-            <article>
-              <header>
-                <figure class="avatar"><img src="{{static_url('img/homepage/avatar.png')}}" alt=""></figure>
-                <address>
-                By <a href="#">A Name</a>
-                </address>
-                <time datetime="2045-04-06T08:15+00:00">Friday, 6<sup>th</sup> April 2045 @08:15:00</time>
-              </header>
-              <div class="comcont">
-                <p>introduce</p>
-              </div>
-            </article>
-          </li>
-        </ul>
-        <h2>Write A Comment</h2>
-        <form action="#" method="post">
-          <div class="one_third first">
-            <label for="name">Name <span>*</span></label>
-            <input type="text" name="name" id="name" value="" size="22" required>
-          </div>
-          <div class="one_third">
-            <label for="email">Mail <span>*</span></label>
-            <input type="email" name="email" id="email" value="" size="22" required>
-          </div>
-          <div class="one_third">
-            <label for="url">Website</label>
-            <input type="url" name="url" id="url" value="" size="22">
-          </div>
-          <div class="block clear">
-            <label for="comment">Your Comment</label>
-            <textarea name="comment" id="comment" cols="25" rows="10"></textarea>
-          </div>
-          <div>
-            <input type="submit" name="submit" value="Submit Form">
-            &nbsp;
-            <input type="reset" name="reset" value="Reset Form">
-          </div>
+      <div id="diy001">
+        <form class="postform" method="post" action="/dashboard/" style="width:207px;border:3px solid black;background:rgba(19,21,34,1);border-radius:7px;">
+          <input name="date001" style="border:1px solid gold;width:200px;height:30px;background:black;color:gold;border-radius: 4px;" type="date" value="">
+          <input name="name001" style="border:1px solid gold;width:200px;height:30px;background:black;color:gold;border-radius: 4px;" type="text" placeholder="input chart name" value="">
+          <select name="data001" style="border:1px solid gold;width:200px;height:100px;background:black;color:gold;border-radius: 4px;" name="choose data" multiple="multiple">
+            <option>Open</option>
+            <option>Close</option>
+            <option>Settle</option>
+            <option>High</option>
+            <option>Low</option>
+          </select>
+          <input style="width:98px;display:inline;background:black;color:gold;border-radius: 4px;" type="submit" value="Plot Now">
+          <input style="width:98px;display:inline;background:black;color:gold;border-radius: 4px;" type="reset" value="Reset">
         </form>
+        <div>
+          <embed id="diychart" src="data:image/png;base64,{{diychart}}">
+        </div>
       </div>
-      -->
     </div>
 
     <div class="clear"></div>
