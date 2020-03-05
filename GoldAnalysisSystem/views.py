@@ -1,9 +1,9 @@
 import datetime
 import pymysql
 from tornado import web
-
 from GoldAnalysisSystem.goldanalysis import plot_price_trend, gettime, plot_price_table, getorigintime, plot_animation, \
     plot_3D, plot_diy
+from GoldAnalysisSystem import settings
 
 
 class MainHandler(web.RequestHandler):
@@ -56,7 +56,7 @@ class ToolsHandler(web.RequestHandler):
 
 class IndexHandler(web.RequestHandler):
     def get(self):
-        self.render('index.html')
+        self.render(settings.setting['template_path']+'\\index.html')
 
 
 class DashboardHandler(web.RequestHandler):

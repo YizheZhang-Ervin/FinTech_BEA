@@ -16,10 +16,13 @@ Run By Terminal:
 
 ## Other optional parameters
 * --port  
-= 8000[default choice]  
+= 8000 [default]  
 * --env  
-= develop[default choice]  
+= develop [default]  
 = produce  
 * --processtype  
-= single[default choice]  
+= single [default]  
 = multiple  
+* --daemon  
+= off [default]  
+= on  
