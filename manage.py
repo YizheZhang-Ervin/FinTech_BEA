@@ -6,6 +6,7 @@ from tornado.options import options, parse_command_line
 from GoldAnalysisSystem import settings
 from GoldAnalysisSystem.daemon import daemon
 from GoldAnalysisSystem.urls import urlpatterns
+from GoldAnalysisSystem.wsgi import start_by_wsgi
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -56,4 +57,9 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # judge whether start by wsgi
+    if options.wsgi == 'on':
+        app = make_app()
+        start_by_wsgi(app)
+    else:
+        main()
