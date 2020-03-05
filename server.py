@@ -1,10 +1,11 @@
 import os
-from tornado import ioloop, web
+from tornado import ioloop, web, httpserver
 from tornado.options import define, options, parse_command_line
 from GoldAnalysisSystem.views import IndexHandler, DashboardHandler, EntryHandler, ToolsHandler
 
 define('port', default='8000', type=int)
 define('env', default='develop', type=str)
+define('processtype', default='single', type=str)
 
 
 def make_app():
@@ -27,7 +28,7 @@ def make_app_deploy():
     return app
 
 
-if __name__ == '__main__':
+def main():
     # decode start command, use python xx.py --port=xxxx
     parse_command_line()
 
@@ -35,12 +36,26 @@ if __name__ == '__main__':
     if options.env == 'develop':
         # start tornado / application object
         app = make_app()
-    elif options.env == 'deploy':
+    elif options.env == 'produce':
         # start tornado
         app = make_app_deploy()
+    else:
+        app = make_app()
 
-    # listen on port
-    app.listen(options.port)
+    # judge multi-process or not
+    if options.processtype == 'multiple':
+        server = httpserver.HTTPServer(app)
+        server.bind(options.port)
+        server.start(0)
+    elif options.processtype == 'single':
+        # listen on port
+        app.listen(options.port)
+    else:
+        app.listen(options.port)
 
     # listen to IO instance
     ioloop.IOLoop.current().start()
+
+
+if __name__ == '__main__':
+    main()

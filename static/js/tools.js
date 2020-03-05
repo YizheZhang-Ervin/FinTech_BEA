@@ -5,7 +5,11 @@ let video = document.getElementById("video");
             video: {width: 350, height: 350},
             audio: true
         };
-        let promise = navigator.mediaDevices.getUserMedia(constraints);
+        if(navigator.mediaDevices.getUserMedia(constraints)=='undefined'){
+            alert("can't use media devices!");
+        }else{
+            var promise = navigator.mediaDevices.getUserMedia(constraints);
+        }
         promise.then(function (MediaStream) {
             video.srcObject = MediaStream;
             video.play();
