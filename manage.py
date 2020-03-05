@@ -35,13 +35,12 @@ if __name__ == '__main__':
     if options.env == 'develop':
         # start tornado / application object
         app = make_app()
-        # listen on port
-        app.listen(options.port)
     elif options.env == 'deploy':
         # start tornado
         app = make_app_deploy()
-        # listen on port
-        app.listen(options.port)
+
+    # listen on port
+    app.listen(options.port)
 
     # listen to IO instance
     ioloop.IOLoop.current().start()
