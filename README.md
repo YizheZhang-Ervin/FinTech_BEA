@@ -9,12 +9,12 @@
 Run By Terminal:
 #### For development environment:  
 * this mode will listen on port: 8000  
-    BEA path > python server.py --env=develop  
+    BEA path > python manage.py  
 #### For deployment and produce environment:  
 * this mode will listen on port: 80  
-    BEA path > python server.py --env=produce  
+    BEA path > python manage.py --env=produce  --port=80  
 
-## Other optional parameters
+## All optional parameters
 * --port  
 = 8000 [default]  
 * --env  
