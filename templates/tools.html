@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="{{ static_url('css/layout.css')}}" rel="stylesheet" type="text/css" media="all">
   <link rel="shortcut icon" href="{{ static_url('img/homepage/favicon.ico') }}">
+  <script src="{{ static_url('js/preventhacker.js') }}"></script>
 </head>
 <body id="top" oncontextmenu=self.event.returnValue=false onselectstart="return false">
 
@@ -62,6 +63,7 @@
         <ul>
             <li><a><button onclick="getMedia()" style="border:0px;background:transparent">Open Mirror</button></a></li>
             <li><a><button onclick="takePhoto()" style="border:0px;background:transparent">Take picture</button></a></li>
+          <li><a><button onclick="showParameters()" style="border:0px;background:transparent">Parameters</button></a></li>
         </ul>
       </nav>
     </div>
@@ -69,6 +71,7 @@
     <div class="content three_quarter">
       <video id="video" width="350px" height="350px" autoplay="autoplay" style="display:inline;border:1px dashed gray"></video>
       <canvas id="canvas" width="350px" height="350px" style="display:inline;border:1px dotted gray"></canvas>
+      <textarea id="ta001" style="border:0px;background:transparent;height:350px;width:705px;font:16px black bold"  readonly></textarea>
     </div>
     <div class="clear"></div>
   </main>

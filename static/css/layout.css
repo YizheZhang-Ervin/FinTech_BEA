@@ -246,7 +246,7 @@ input:focus, textarea:focus, *:required:focus{border-color:#9D8D65;}
 .row2{color:#4A4A4A; background-color:#F2F2F2;}
 .row3{color:#4A4A4A; background-color:#FFFFFF;}
 .row4{color:#CBCBCB;}
-.row5, .row5 a{color:gold; background-color:#000000;}
+.row5, .row5 a{color:gold; background-color:#9D8D65;}
 
 
 /* Page Intro */
