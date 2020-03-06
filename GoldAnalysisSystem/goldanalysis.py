@@ -1,7 +1,7 @@
 import base64
 import datetime
 from io import BytesIO
-
+import pandas as pd
 import numpy as np
 import quandl
 import matplotlib.pyplot as plt
@@ -14,18 +14,23 @@ from mpl_toolkits.mplot3d import Axes3D
 register_matplotlib_converters()
 
 
-def time_judge(time, data, move_type):
+def time_judge(times, data, move_type, timeperiod):
     while True:
-        if time in data.index:
-            return str(time)
+        if timeperiod == 'short':
+            timeduration = data.index
+        elif timeperiod == 'long':
+            timeduration = data['Date']
+
+        if times in timeduration or np.any(times == timeduration):
+            return str(times)
         else:
-            b = datetime.datetime.strptime(time, "%Y-%m-%d")
+            b = datetime.datetime.strptime(times, "%Y-%m-%d")
             if move_type == 'back':
                 c = b + datetime.timedelta(days=-1)
-                time = c.strftime("%Y-%m-%d")
+                times = c.strftime("%Y-%m-%d")
             elif move_type == 'forward':
                 c = b + datetime.timedelta(days=1)
-                time = c.strftime("%Y-%m-%d")
+                times = c.strftime("%Y-%m-%d")
 
 
 def getorigintime():
@@ -42,6 +47,11 @@ def getdata():
     golddata = quandl.get("SHFE/AUZ2020", authtoken="EDHKCFxMS-fA8rLYvvef", start_date="2019-11-18",
                           end_date=gettime())
     return golddata
+
+
+def getdata_l():
+    data = pd.read_excel('' + 'alldata.xlsx')
+    return data
 
 
 def getcurrentdata():
@@ -67,8 +77,8 @@ def getcurrentdata():
 def plot_price_trend(time, name):
     golddata = getdata()
     currenttime_ymd = str(gettime())
-    start = time_judge(time, golddata, 'forward')
-    end = time_judge(currenttime_ymd, golddata, 'back')
+    start = time_judge(time, golddata, 'forward', 'short')
+    end = time_judge(currenttime_ymd, golddata, 'back', 'short')
     data = golddata.loc[start:end, ['Open', 'Close', 'High', 'Low', 'Settle']]
     x = data.index
     y_open = data['Open'].values
@@ -116,11 +126,87 @@ def plot_price_trend(time, name):
     return data, name
 
 
+def write_xdisplay(name, x, i):
+    if name:
+        x_display = []
+        for index, value in enumerate(x):
+            if index % i == 0:
+                x_display.append(value.strftime('%Y-%m'))
+            else:
+                x_display.append('')
+    else:
+        x_display = []
+        for index, value in enumerate(x):
+            x_display.append(value.strftime('%m-%d'))
+    return x_display
+
+
+def plot_price_trend_l(time, name):
+    golddata = getdata_l()
+    start1 = time_judge(time, golddata, 'forward', 'long')
+    # end = time_judge('2019-12-16', golddata, 'back', 'long')
+    start = pd.Timestamp(start1)
+    start64 = np.datetime64(start)
+    end = datetime.datetime(2019, 12, 16)
+    end64 = np.datetime64(end)
+    df = golddata.loc[:, ['Date', 'Open', 'Close', 'High', 'Low', 'Settle']]
+    data = df[(df['Date'] >= start64) & (df['Date'] <= end64)]
+    x = data['Date']
+    y_open = data['Open'].values
+    y_close = data['Close'].values
+    y_high = data['High'].values
+    y_low = data['Low'].values
+    y_settle = data['Settle'].values
+    plt.title(name, color='Navy', fontsize='large', fontweight='bold')
+    plt.figure(dpi=300)
+    # plt.figure(figsize=(10,5))
+    # border of axis x and y
+    ax = plt.gca()
+    ax.spines['top'].set_color('none')
+    ax.spines['bottom'].set_color('Navy')
+    ax.spines['left'].set_color('Navy')
+    ax.spines['right'].set_color('none')
+    plt.plot(x, y_open, label="Open Price")
+    plt.plot(x, y_close, label="Close Price")
+    plt.plot(x, y_high, label="High Price", ls='--')
+    plt.plot(x, y_low, label="Low Price", ls='--')
+    plt.plot(x, y_settle, label="Settle Price", marker='.')
+    # change axis value for longer than 1 month
+    if name == '6months':
+        x_display = write_xdisplay(name, x, 30)
+    elif name == '1year':
+        x_display = write_xdisplay(name, x, 120)
+    elif name == '2years':
+        x_display = write_xdisplay(name, x, 180)
+    elif name == '3years':
+        x_display = write_xdisplay(name, x, 360)
+    elif name == '5years':
+        x_display = write_xdisplay(name, x, 720)
+    elif name == '10years':
+        x_display = write_xdisplay(name, x, 1440)
+    elif name == '12years':
+        x_display = write_xdisplay(name, x, 1440)
+
+    # axis x and y
+    plt.xticks(x, x_display, color='Navy', rotation='45')
+    plt.yticks(color='Navy')
+    plt.legend()
+    # pwd = os.path.dirname(os.path.dirname(__file__))
+    # saveplace = pwd + '/static/pfas/img/' + name + '.png'
+    # plt.savefig(saveplace, transparent=True)
+    # use ascii save and load png
+    # put this in html :<embed id="pic0" src="data:image/png;base64,{{pic_1}}" />
+    buf = BytesIO()
+    plt.savefig(buf, transparent=True, format='png')
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    return data, name
+
+
 def plot_price_table(time, name):
     golddata = getdata()
     currenttime_ymd = str(gettime())
-    start = time_judge(time, golddata, 'forward')
-    end = time_judge(currenttime_ymd, golddata, 'back')
+    start = time_judge(time, golddata, 'forward', 'short')
+    end = time_judge(currenttime_ymd, golddata, 'back', 'short')
     data = golddata.loc[start:end, ['Open', 'Close', 'High', 'Low', 'Settle']]
     plt.figure()
     ax = plt.gca()
@@ -134,8 +220,8 @@ def plot_price_table(time, name):
     row_labels = data.index.strftime('%m-%d')
     table_vals = data.values.tolist()
     cc_col = ['none' for i in range(len(col_labels))]
-    cc = [cc_col, cc_col, cc_col, cc_col]
-    cc_row = ['none', 'none', 'none', 'none', 'none']
+    cc = [cc_col for i in range(len(row_labels))]
+    cc_row = ['none' for i in range(len(row_labels))]
     plt.table(cellText=table_vals, rowLabels=row_labels, colLabels=col_labels, loc='center', cellColours=cc,
               rowColours=cc_row, colColours=cc_col)
     # pwd = os.path.dirname(os.path.dirname(__file__))
@@ -259,8 +345,8 @@ def plot_diy(time, name, *datatype):
     columns = list(datatype)
     golddata = getdata()
     currenttime_ymd = str(gettime())
-    start = time_judge(time, golddata, 'forward')
-    end = time_judge(currenttime_ymd, golddata, 'back')
+    start = time_judge(time, golddata, 'forward', 'short')
+    end = time_judge(currenttime_ymd, golddata, 'back', 'short')
     data = golddata.loc[start:end, columns]
     x = data.index
     plt.title(name, color='Navy', fontsize='large', fontweight='bold')
@@ -312,3 +398,8 @@ def plot_diy(time, name, *datatype):
 
 if __name__ == '__main__':
     pass
+    # dt = getdata_l()
+    # print(dt['Date'])
+    # recordtime = datetime.datetime.strptime('2019-12-16', "%Y-%m-%d")
+    # sixmonths = (recordtime - datetime.timedelta(days=180)).strftime('%Y-%m-%d')
+    # plot_price_trend_l(sixmonths, '6months')

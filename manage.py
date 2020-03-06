@@ -1,13 +1,10 @@
 import os
-
 from tornado import ioloop, web, httpserver
 from tornado.options import options, parse_command_line
-
 from GoldAnalysisSystem import settings
 from GoldAnalysisSystem.daemon import daemon
 from GoldAnalysisSystem.urls import urlpatterns
 from GoldAnalysisSystem.wsgi import start_by_wsgi
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
