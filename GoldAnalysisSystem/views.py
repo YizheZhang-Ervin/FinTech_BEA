@@ -56,7 +56,7 @@ class ToolsHandler(web.RequestHandler):
 
 class IndexHandler(web.RequestHandler):
     def get(self):
-        self.render(settings.setting['template_path']+'\\index.html')
+        self.render(settings.setting['template_path']+'/index.html')
 
 
 class DashboardHandler(web.RequestHandler):
