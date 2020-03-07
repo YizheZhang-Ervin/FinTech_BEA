@@ -285,7 +285,7 @@ input:focus, textarea:focus, *:required:focus{border-color:#9D8D65;}
 #breadcrumb li:last-child a{}
 
 .container .sidebar nav a{color:inherit; border-color:#D7D7D7;}
-.container .sidebar nav a:hover{color:#9D8D65;}
+.container .sidebar nav a:hover{color:gold;}
 
 .pagination a, .pagination strong{border-color:#D7D7D7;}
 .pagination .current *{color:#FFFFFF; background-color:#9D8D65;}
