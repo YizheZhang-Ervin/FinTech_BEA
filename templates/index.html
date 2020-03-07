@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="{{ static_url('css/layout.css')}}" rel="stylesheet" type="text/css" media="all">
   <link rel="shortcut icon" href="{{ static_url('img/homepage/favicon.ico') }}">
-  <script src="{{ static_url('js/preventhacker.js') }}"></script>
+  <link href="{{ static_url('css/diy.css')}}" rel="stylesheet" type="text/css" media="all">
 </head>
-<body id="top" oncontextmenu=self.event.returnValue=false onselectstart="return false">
+<body id="top">
 <!-- Begin of page -->
 <div class="bgded" style="background-image:url({{ static_url('img/homepage/backgrounds/bg-part0.png') }});">
   <nav id="mainav" class="hoc clear">
@@ -124,25 +124,25 @@
       <li class="one_quarter first">
         <article><a href="#"><i class="icon btmspace-30 fa fa-ioxhost"></i></a>
           <h6 class="heading font-x1"><a href="https://ervinzhang.pythonanywhere.com/pfas/">PFAS(Django)</a></h6>
-          <p><i>Python Financial Analysis System</i> <br>completed the short term gold data time-slicing analysis [&hellip;]</p>
+          <p class="intro001"><i>Python Financial Analysis System</i> <br>completed the short term gold data time-slicing analysis [&hellip;]</p>
         </article>
       </li>
       <li class="one_quarter">
         <article><a href="#"><i class="icon btmspace-30 fa fa-ioxhost"></i></a>
           <h6 class="heading font-x1"><a href="https://bea-analysis.herokuapp.com/">BEA-GAS(Tornado)</a></h6>
-          <p><i>Gold Anslysis System</i> <br>extended the PFAS and analyzed multi-dimensions with short term and long term data[&hellip;]</p>
+          <p class="intro001"><i>Gold Anslysis System</i> <br>extended the PFAS and analyzed multi-dimensions with short term and long term data[&hellip;]</p>
         </article>
       </li>
       <li class="one_quarter">
         <article><a href="#"><i class="icon btmspace-30 fa fa-ioxhost"></i></a>
           <h6 class="heading font-x1"><a href="https://fin-analysis.herokuapp.com/">NIA7-FAS(Flask)</a></h6>
-          <p><i>Financial Analysis System</i> <br>aimed at analysis of different financial products[&hellip;]</p>
+          <p class="intro001"><i>Financial Analysis System</i> <br>aimed at analysis of different financial products[&hellip;]</p>
         </article>
       </li>
       <li class="one_quarter">
         <article><a href="#"><i class="icon btmspace-30 fa fa-ioxhost"></i></a>
           <h6 class="heading font-x1"><a>Others</a></h6>
-          <p>others [&hellip;]</p>
+          <p class="intro001">others [&hellip;]</p>
         </article>
       </li>
     </ul>
@@ -160,8 +160,15 @@
       <p>Author Information Here</p>
     </div>
     <div class="group latest">
-      <article class="one_third first">
+      <article class="one_third first" style="margin-left:15%">
         <figure><a class="imgover" href="#"><img src="{{ static_url('img/homepage/ervin.jpg') }}" alt=""></a></figure>
+        <footer>
+          <a target="_blank" href="https://ervinzhang.pythonanywhere.com">Personal Website</a>
+          <br>
+          <a target="_blank" href="https://www.linkedin.com/in/yizhe-zhang/">linkedin.com/in/yizhe-zhang</a>
+        </footer>
+      </article>
+      <div style="float:left;margin-left: 10%;">
         <h4 class="heading">Yizhe(Ervin) Zhang</h4>
         <ul class="nospace meta">
           <li><i class="fa fa-user"></i>Python Engineer</li>
@@ -169,9 +176,9 @@
           <li><i class="fa fa-comments"></i>Boston, US</li>
         </ul>
         <p>Website construction<br>data modeling<br>data visualization<br>[&hellip;]</p>
-        <footer><a target="_blank" href="https://ervinzhang.pythonanywhere.com">Personal Website</a><br><a target="_blank" href="https://www.linkedin.com/in/yizhe-zhang/">Linkedin</a></footer>
-      </article>
+      </div>
     </div>
+
     <!-- ################################################################################################ -->
   </section>
 </div>
@@ -186,20 +193,22 @@
       <ul class="nospace btmspace-30 linklist contact">
         <li><i class="fa fa-map-marker"></i>
           <address>
-          Boston, Shanghai, Guangzhou, etc.
+          Boston, MA
           </address>
         </li>
-        <li><i class="fa fa-phone"></i> +1 </li>
-        <li><i class="fa fa-fax"></i> +86 </li>
-        <li><i class="fa fa-envelope-o"></i> Email </li>
+        <li><i class="fa fa-phone"></i>+1 </li>
+        <li><i class="fa fa-fax"></i>+1 </li>
+        <li><i class="fa fa-envelope-o"></i>zhang.yizhe@husky.neu.edu</li>
       </ul>
     </div>
     <div class="one_third">
-      <h6 class="heading">Contact us</h6>
-      <p class="nospace btmspace-30">Please email us and We will reply as soon as possible</p>
+      <h6 class="heading">Contact Me</h6>
+      <p class="nospace btmspace-30">Visit my website for further contact information
+        <a href="https://ervinzhang.pythonanywhere.com/" target="_blank" style="text-decoration:underline;">(My website link)</a>
+      </p>
+
       <form method="post" action="#">
         <fieldset>
-          <legend>Newsletter:</legend>
           <input class="btmspace-15" type="text" value="" placeholder="Name">
           <input class="btmspace-15" type="text" value="" placeholder="Email">
           <button type="submit" value="submit">Submit</button>
@@ -212,15 +221,15 @@
         <li>
           <article>
             <h2 class="nospace font-x1"><a href="#">Analysis Gold Data</a></h2>
-            <time class="font-xs block btmspace-10" datetime="2045-04-06">Friday, 6<sup>th</sup> April 2045</time>
-            <p class="nospace">introduction [&hellip;]</p>
+            <time class="font-xs block btmspace-10" datetime="2020-01-01">Wednesday, 1<sup>st</sup> Jan 2099</time>
+            <p class="nospace">Data from 2008-2020 [&hellip;]</p>
           </article>
         </li>
         <li>
           <article>
             <h2 class="nospace font-x1"><a href="#">Visualization Trend</a></h2>
-            <time class="font-xs block btmspace-10" datetime="2045-04-05">Thursday, 5<sup>th</sup> April 2045</time>
-            <p class="nospace">introduction [&hellip;]</p>
+            <time class="font-xs block btmspace-10" datetime="2020-01-01">Wednesday, 1<sup>st</sup> Jan 2020</time>
+            <p class="nospace">Visualization for 12 years[&hellip;]</p>
           </article>
         </li>
       </ul>
