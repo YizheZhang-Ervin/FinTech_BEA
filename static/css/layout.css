@@ -228,7 +228,7 @@ a:active, a:focus{background:transparent;}/* IE10 + 11 Bugfix - prevents grey ba
 hr, .borderedbox{border-color:#D7D7D7;}
 label span{color:#FF0000; background-color:inherit;}
 input:focus, textarea:focus, *:required:focus{border-color:#9D8D65;}
-.overlay{color:#FFFFFF; background-color:inherit;}
+.overlay{color:gold; background-color:inherit;}
 .overlay::after{color:inherit; background-color:rgba(0,0,0,.4);}
 
 .btn, .btn.inverse:hover{color:#FFFFFF; background-color:#9D8D65; border-color:#9D8D65;}
@@ -243,9 +243,9 @@ input:focus, textarea:focus, *:required:focus{border-color:#9D8D65;}
 
 /* Rows */
 .row1{color:gold; background-color:rgba(0,0,0,.55);}
-.row2{color:#4A4A4A; background-color:#F2F2F2;}
-.row3{color:#4A4A4A; background-color:#FFFFFF;}
-.row4{color:#CBCBCB;}
+.row2{color:white; background-color:#9D8D65;}
+.row3{color:white; background-color:#9D8D65;}
+.row4{color:gold;}
 .row5, .row5 a{color:gold; background-color:#9D8D65;}
 
 
@@ -264,13 +264,13 @@ input:focus, textarea:focus, *:required:focus{border-color:#9D8D65;}
 
 
 /* Footer */
-#footer .heading{color:#FFFFFF;}
+#footer .heading{color:gold;}
 #footer hr, #footer .borderedbox, #footer .linklist li{border-color:rgba(255,255,255,.1);}
 
 #footer input, #footer button{border-color:transparent;}
-#footer input{color:#FFFFFF; background-color:#000000;}
+#footer input{color:gold; background-color:#000000;}
 #footer input:focus{border-color:#9D8D65;}
-#footer button{color:#FFFFFF; background-color:#9D8D65;}
+#footer button{color:gold; background-color:#9D8D65;}
 
 
 /* Navigation */
