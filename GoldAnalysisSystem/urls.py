@@ -6,6 +6,7 @@ urlpatterns = [
     (r'/dashboard/', DashboardHandler),
     # (r'/entry_point/', EntryHandler),
     (r'/tools/', ToolsHandler),
-    (r'.*', ErrorHandler),
     (r'/sql/', InsertsqlHandler),
+    (r'.*', ErrorHandler),
+
 ]

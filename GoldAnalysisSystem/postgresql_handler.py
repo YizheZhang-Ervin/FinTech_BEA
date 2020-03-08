@@ -134,4 +134,4 @@ class InsertsqlHandler(web.RequestHandler):
             conn.close()
             self.render('sql.html', sqltext=rows)
         else:
-            self.render('sql.html')
+            self.render('sql.html', sqltext='')
