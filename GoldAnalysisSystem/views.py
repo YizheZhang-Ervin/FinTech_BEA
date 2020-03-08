@@ -1,32 +1,31 @@
 import datetime
-import pymysql
 from tornado import web
 from GoldAnalysisSystem.goldanalysis import plot_price_trend, gettime, plot_price_table, getorigintime, plot_animation, \
     plot_3D, plot_diy, plot_price_trend_l
 from GoldAnalysisSystem import settings
 
 
-class EntryHandler(web.RequestHandler):
-    def initialize(self):
-        # visit DB
-        self.conn = pymysql.Connection(host='', password='', database='', user='', port='')
-        self.cursor = self.conn.cursor()
-
-    def prepare(self):
-        pass
-
-    def get(self):
-        sql = 'select * from xx;'
-        self.cursor.execute(sql)
-        data = self.cursor.fetchall()
-        self.write('query here')
-
-    def post(self):
-        pass
-
-    def on_finish(self):
-        # execute at last
-        self.conn.close()
+# class EntryHandler(web.RequestHandler):
+#     def initialize(self):
+#         # visit DB
+#         self.conn = pymysql.Connection(host='', password='', database='', user='', port='')
+#         self.cursor = self.conn.cursor()
+#
+#     def prepare(self):
+#         pass
+#
+#     def get(self):
+#         sql = 'select * from xx;'
+#         self.cursor.execute(sql)
+#         data = self.cursor.fetchall()
+#         self.write('query here')
+#
+#     def post(self):
+#         pass
+#
+#     def on_finish(self):
+#         # execute at last
+#         self.conn.close()
 
 
 class ToolsHandler(web.RequestHandler):
