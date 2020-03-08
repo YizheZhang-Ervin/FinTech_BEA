@@ -153,3 +153,18 @@ class DashboardHandler(web.RequestHandler):
         except Exception:
             self.render('dashboard.html', time='', type='', name='', diychart='')
 
+
+class BaseHandler(web.RequestHandler):
+    def get(self):
+        self.write_error(404)
+
+    def write_error(self, status_code, **kwargs):
+        if status_code == 404:
+            self.write('Something goes wrong>>> <br>The error code is: '
+                       + str(status_code)+'>>> <br>Thank you for watching>>>')
+        elif status_code == 500:
+            self.write('Something goes wrong>>> <br>The error code is: '
+                       + str(status_code)+'>>> <br>Thank you for watching>>>')
+        else:
+            self.write('Something goes wrong>>> <br>The error code is: '
+                       + str(status_code)+'>>> <br>Thank you for watching>>>')
