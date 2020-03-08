@@ -11,6 +11,8 @@ import mpl_toolkits.mplot3d.axes3d as p3
 from pandas.plotting import register_matplotlib_converters
 from mpl_toolkits.mplot3d import Axes3D
 
+from GoldAnalysisSystem.database_handler import BASE_DIR
+
 register_matplotlib_converters()
 
 
@@ -50,7 +52,7 @@ def getdata():
 
 
 def getdata_l():
-    data = pd.read_excel('' + 'alldata.xlsx')
+    data = pd.read_excel(BASE_DIR + '/alldata_filter.xlsx')
     return data
 
 
@@ -173,19 +175,19 @@ def plot_price_trend_l(time, name):
     plt.plot(x, y_settle, label="Settle Price", marker='.')
     # change axis value for longer than 1 month
     if name == '6months':
-        x_display = write_xdisplay(name, x, 30)
+        x_display = write_xdisplay(name, x, 15)
     elif name == '1year':
-        x_display = write_xdisplay(name, x, 120)
+        x_display = write_xdisplay(name, x, 30)
     elif name == '2years':
-        x_display = write_xdisplay(name, x, 180)
+        x_display = write_xdisplay(name, x, 60)
     elif name == '3years':
-        x_display = write_xdisplay(name, x, 360)
+        x_display = write_xdisplay(name, x, 90)
     elif name == '5years':
-        x_display = write_xdisplay(name, x, 720)
+        x_display = write_xdisplay(name, x, 180)
     elif name == '10years':
-        x_display = write_xdisplay(name, x, 1440)
+        x_display = write_xdisplay(name, x, 360)
     elif name == '12years':
-        x_display = write_xdisplay(name, x, 1440)
+        x_display = write_xdisplay(name, x, 420)
 
     # axis x and y
     plt.xticks(x, x_display, color='Navy', rotation='45')

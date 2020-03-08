@@ -3,7 +3,6 @@ from tornado import web
 from GoldAnalysisSystem.goldanalysis import plot_price_trend, gettime, plot_price_table, getorigintime, plot_animation, \
     plot_3D, plot_diy, plot_price_trend_l
 from GoldAnalysisSystem import settings
-from GoldAnalysisSystem.database_handler import connect_to_db
 
 
 class ToolsHandler(web.RequestHandler):
@@ -109,20 +108,6 @@ class DashboardHandler(web.RequestHandler):
             self.render('dashboard.html', time='', type='', name='', diychart=diychart)
         except Exception:
             self.render('dashboard.html', time='', type='', name='', diychart='')
-
-
-class DashboardHandler2(web.RequestHandler):
-    def get(self):
-        sql = ''
-        conn = connect_to_db()
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        effect_row = cursor.rowcount
-        conn.commit()
-        cursor.close()
-        conn.close()
-        if effect_row > 0:
-            return 'success'
 
 
 class ErrorHandler(web.RequestHandler):
