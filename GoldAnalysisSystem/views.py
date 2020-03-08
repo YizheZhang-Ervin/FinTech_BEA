@@ -1,8 +1,8 @@
 import datetime
 from tornado import web
-from GoldAnalysisSystem.goldanalysis import plot_price_trend, gettime, plot_price_table, getorigintime, plot_animation, \
-    plot_3D, plot_price_trend_l_db, plot_diy_db
+from GoldAnalysisSystem.goldanalysis_xlsx_api import plot_price_trend, gettime, plot_price_table, getorigintime, plot_animation, plot_3D
 from GoldAnalysisSystem import settings
+from GoldAnalysisSystem.goldvisualiztion_db import plot_price_trend_l_db, plot_diy_db
 
 
 class ToolsHandler(web.RequestHandler):
