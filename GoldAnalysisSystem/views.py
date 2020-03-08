@@ -1,7 +1,7 @@
 import datetime
 from tornado import web
 from GoldAnalysisSystem.goldanalysis import plot_price_trend, gettime, plot_price_table, getorigintime, plot_animation, \
-    plot_3D, plot_diy, plot_price_trend_l_db
+    plot_3D, plot_price_trend_l_db, plot_diy_db
 from GoldAnalysisSystem import settings
 
 
@@ -104,7 +104,7 @@ class DashboardHandler(web.RequestHandler):
         name001 = self.get_body_argument('name001', '')
         data001 = self.get_body_arguments('data001', '')
         try:
-            diychart = plot_diy(date001, name001, *data001)
+            diychart = plot_diy_db(date001, name001, *data001)
             self.render('dashboard.html', time='', type='', name='', diychart=diychart)
         except Exception:
             self.render('dashboard.html', time='', type='', name='', diychart='')

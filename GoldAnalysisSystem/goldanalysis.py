@@ -133,6 +133,21 @@ def plot_price_trend(time, name):
 
 
 def write_xdisplay(name, x, i):
+    if name:
+        x_display = []
+        for index, value in enumerate(x):
+            if index % i == 0:
+                x_display.append(value.strftime('%Y-%m'))
+            else:
+                x_display.append('')
+    else:
+        x_display = []
+        for index, value in enumerate(x):
+            x_display.append(value.strftime('%m-%d'))
+    return x_display
+
+
+def write_xdisplay_db(name, x, i):
     origin = datetime.datetime.strptime('1900-01-01', "%Y-%m-%d")
 
     if name:
@@ -245,7 +260,7 @@ def plot_price_trend_l_db(start_time, name):
     # time handling
     st_new = datetime.datetime.strptime(start_time, "%Y-%m-%d")
     origin = datetime.datetime.strptime('1900-01-01', "%Y-%m-%d")
-    delta = (st_new-origin).days+2
+    delta = (st_new - origin).days + 2
     open_p = exe_sql(cursor, 'open', delta)
     close_p = exe_sql(cursor, 'close', delta)
     high_p = exe_sql(cursor, 'high', delta)
@@ -279,19 +294,19 @@ def plot_price_trend_l_db(start_time, name):
     plt.plot(x, y_settle, label="Settle Price", marker='.')
     # change axis value for longer than 1 month
     if name == '6months':
-        x_display = write_xdisplay(name, x, 15)
+        x_display = write_xdisplay_db(name, x, 15)
     elif name == '1year':
-        x_display = write_xdisplay(name, x, 30)
+        x_display = write_xdisplay_db(name, x, 30)
     elif name == '2years':
-        x_display = write_xdisplay(name, x, 60)
+        x_display = write_xdisplay_db(name, x, 60)
     elif name == '3years':
-        x_display = write_xdisplay(name, x, 90)
+        x_display = write_xdisplay_db(name, x, 90)
     elif name == '5years':
-        x_display = write_xdisplay(name, x, 180)
+        x_display = write_xdisplay_db(name, x, 180)
     elif name == '10years':
-        x_display = write_xdisplay(name, x, 360)
+        x_display = write_xdisplay_db(name, x, 360)
     elif name == '12years':
-        x_display = write_xdisplay(name, x, 420)
+        x_display = write_xdisplay_db(name, x, 420)
 
     # axis x and y
     plt.xticks(x, x_display, color='Navy', rotation='45')
@@ -487,6 +502,78 @@ def plot_diy(time, name, *datatype):
             plt.plot(x, data[i].values, label=i + ' Price', ls='--')
         else:
             plt.plot(x, data[i].values, label=i + ' Price')
+    # axis x and y
+    plt.xticks(x, x_display, color='Navy', rotation='45')
+    plt.yticks(color='Navy')
+    plt.legend()
+    # pwd = os.path.dirname(os.path.dirname(__file__))
+    # saveplace = pwd + '/static/pfas/img/' + name + '.png'
+    # plt.savefig(saveplace, transparent=True)
+    # use ascii save and load png
+    # put this in html :<embed id="pic0" src="data:image/png;base64,{{pic_1}}" />
+    buf = BytesIO()
+    plt.savefig(buf, transparent=True, format='png')
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    return data
+
+
+def plot_diy_db(start_time, name, *datatype):
+    # connect db
+    conn = connect_to_db()
+    cursor = conn.cursor()
+    # cols
+    columns = list(datatype)
+    # time handling
+    st_new = datetime.datetime.strptime(start_time, "%Y-%m-%d")
+    origin = datetime.datetime.strptime('1900-01-01', "%Y-%m-%d")
+    delta = (st_new - origin).days + 2
+    # get data
+    cols = {}
+    for i in columns:
+        cols[i] = exe_sql(cursor, str(i), delta)
+    date = exe_sql(cursor, 'date', delta)
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    # set x
+    x = date
+    plt.title(name, color='Navy', fontsize='large', fontweight='bold')
+    plt.figure(dpi=300)
+
+    # border of axis x and y
+    ax = plt.gca()
+    ax.spines['top'].set_color('none')
+    ax.spines['bottom'].set_color('Navy')
+    ax.spines['left'].set_color('Navy')
+    ax.spines['right'].set_color('none')
+
+    # change axis value for longer than 1 month
+    if 0 <= len(date) <= 119:
+        x_display = write_xdisplay_db(name, x, 1)
+    elif 120 <= len(date) <= 299:
+        x_display = write_xdisplay_db(name, x, 15)
+    elif 300 <= len(date) <= 479:
+        x_display = write_xdisplay_db(name, x, 30)
+    elif 479 <= len(date) <= 719:
+        x_display = write_xdisplay_db(name, x, 60)
+    elif 720 <= len(date) <= 1199:
+        x_display = write_xdisplay_db(name, x, 90)
+    elif 1200 <= len(date) <= 2399:
+        x_display = write_xdisplay_db(name, x, 180)
+    elif 2400 <= len(date) <= 2879:
+        x_display = write_xdisplay_db(name, x, 360)
+    elif len(date) >= 2880:
+        x_display = write_xdisplay_db(name, x, 420)
+
+    # diy plot
+    for i in columns:
+        if i == 'settle':
+            plt.plot(x, cols[i], label=i + ' Price', marker='.')
+        elif i == 'high' or i == 'low':
+            plt.plot(x, cols[i], label=i + ' Price', ls='--')
+        else:
+            plt.plot(x, cols[i], label=i + ' Price')
     # axis x and y
     plt.xticks(x, x_display, color='Navy', rotation='45')
     plt.yticks(color='Navy')

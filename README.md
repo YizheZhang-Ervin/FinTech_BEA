@@ -27,3 +27,13 @@ Run By Terminal:
 * --daemon  
 = off [default]  
 = on  
+
+## Data
+1. Trend Plots & Tables  
+    * Time-slicing  
+        days - 3months: API  
+        6months - 12years: Sqlite  
+    * DIY Plots: Sqlite  
+2. Animation: API  
+3. 3D Plots: API  
+
