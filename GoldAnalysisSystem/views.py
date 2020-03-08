@@ -3,7 +3,7 @@ from tornado import web
 from GoldAnalysisSystem.goldanalysis import plot_price_trend, gettime, plot_price_table, getorigintime, plot_animation, \
     plot_3D, plot_diy, plot_price_trend_l
 from GoldAnalysisSystem import settings
-from GoldAnalysisSystem.postgresql_handler import connect_to_db
+from GoldAnalysisSystem.database_handler import connect_to_db
 
 
 class ToolsHandler(web.RequestHandler):
@@ -17,7 +17,7 @@ class IndexHandler(web.RequestHandler):
 
 
 class DashboardHandler(web.RequestHandler):
-    def get(self, *args, **kwargs):
+    def get(self):
         currenttime = getorigintime()
         recordtime = datetime.datetime.strptime('2019-12-16', "%Y-%m-%d")
         name = ''
