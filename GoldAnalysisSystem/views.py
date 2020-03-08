@@ -3,29 +3,7 @@ from tornado import web
 from GoldAnalysisSystem.goldanalysis import plot_price_trend, gettime, plot_price_table, getorigintime, plot_animation, \
     plot_3D, plot_diy, plot_price_trend_l
 from GoldAnalysisSystem import settings
-
-
-# class EntryHandler(web.RequestHandler):
-#     def initialize(self):
-#         # visit DB
-#         self.conn = pymysql.Connection(host='', password='', database='', user='', port='')
-#         self.cursor = self.conn.cursor()
-#
-#     def prepare(self):
-#         pass
-#
-#     def get(self):
-#         sql = 'select * from xx;'
-#         self.cursor.execute(sql)
-#         data = self.cursor.fetchall()
-#         self.write('query here')
-#
-#     def post(self):
-#         pass
-#
-#     def on_finish(self):
-#         # execute at last
-#         self.conn.close()
+from GoldAnalysisSystem.postgresql_handler import connect_to_db
 
 
 class ToolsHandler(web.RequestHandler):
@@ -35,7 +13,7 @@ class ToolsHandler(web.RequestHandler):
 
 class IndexHandler(web.RequestHandler):
     def get(self):
-        self.render(settings.setting['template_path']+'/index.html')
+        self.render(settings.setting['template_path'] + '/index.html')
 
 
 class DashboardHandler(web.RequestHandler):
@@ -133,6 +111,20 @@ class DashboardHandler(web.RequestHandler):
             self.render('dashboard.html', time='', type='', name='', diychart='')
 
 
+class DashboardHandler2(web.RequestHandler):
+    def get(self):
+        sql = ''
+        conn = connect_to_db()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        effect_row = cursor.rowcount
+        conn.commit()
+        cursor.close()
+        conn.close()
+        if effect_row > 0:
+            return 'success'
+
+
 class ErrorHandler(web.RequestHandler):
     def get(self):
         self.write_error(404)
@@ -140,10 +132,10 @@ class ErrorHandler(web.RequestHandler):
     def write_error(self, status_code, **kwargs):
         if status_code == 404:
             self.write('Something goes wrong>>> <br>The error code is: '
-                       + str(status_code)+'>>> <br>Thank you for watching>>>')
+                       + str(status_code) + '>>> <br>Thank you for watching>>>')
         elif status_code == 500:
             self.write('Something goes wrong>>> <br>The error code is: '
-                       + str(status_code)+'>>> <br>Thank you for watching>>>')
+                       + str(status_code) + '>>> <br>Thank you for watching>>>')
         else:
             self.write('Something goes wrong>>> <br>The error code is: '
-                       + str(status_code)+'>>> <br>Thank you for watching>>>')
+                       + str(status_code) + '>>> <br>Thank you for watching>>>')
