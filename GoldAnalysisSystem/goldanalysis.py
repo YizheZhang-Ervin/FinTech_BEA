@@ -549,21 +549,23 @@ def plot_diy_db(start_time, name, *datatype):
     ax.spines['right'].set_color('none')
 
     # change axis value for longer than 1 month
-    if 0 <= len(date) <= 119:
+    if 0 <= len(date) <= 29:
         x_display = write_xdisplay_db(name, x, 1)
-    elif 120 <= len(date) <= 299:
+    elif 30 <= len(date) <= 89:
+        x_display = write_xdisplay_db(name, x, 7)
+    elif 90 <= len(date) <= 179:
         x_display = write_xdisplay_db(name, x, 15)
-    elif 300 <= len(date) <= 479:
+    elif 180 <= len(date) <= 359:
         x_display = write_xdisplay_db(name, x, 30)
-    elif 479 <= len(date) <= 719:
+    elif 360 <= len(date) <= 719:
         x_display = write_xdisplay_db(name, x, 60)
-    elif 720 <= len(date) <= 1199:
+    elif 720 <= len(date) <= 1079:
         x_display = write_xdisplay_db(name, x, 90)
-    elif 1200 <= len(date) <= 2399:
+    elif 1080 <= len(date) <= 1799:
         x_display = write_xdisplay_db(name, x, 180)
-    elif 2400 <= len(date) <= 2879:
+    elif 1800 <= len(date) <= 3599:
         x_display = write_xdisplay_db(name, x, 360)
-    elif len(date) >= 2880:
+    elif len(date) >= 3599:
         x_display = write_xdisplay_db(name, x, 420)
 
     # diy plot
