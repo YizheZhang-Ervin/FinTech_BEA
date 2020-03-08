@@ -6,26 +6,6 @@ from GoldAnalysisSystem.goldanalysis import plot_price_trend, gettime, plot_pric
 from GoldAnalysisSystem import settings
 
 
-class MainHandler(web.RequestHandler):
-    def get(self):
-        self.write('hello get')
-        # receive values
-        # GET/POST: self.get_argument()/ self.get_arguments()
-        # GET: self.get_query_argument()/ self.get_query_arguments()
-        # POST: self.get_body_argument()/ self.get_body_arguments()
-        # status code
-        # self.set_status(200)
-        # set/clear cookie
-        # self.set_cookie('abc', '123', expires_days=1)
-        # self.clear_cookie('abc')/ self.clear_all_cookies()
-        # redirect
-        # self.redirect('/res/')
-
-    def post(self):
-        # add content
-        self.write('hello post')
-
-
 class EntryHandler(web.RequestHandler):
     def initialize(self):
         # visit DB
@@ -154,7 +134,7 @@ class DashboardHandler(web.RequestHandler):
             self.render('dashboard.html', time='', type='', name='', diychart='')
 
 
-class BaseHandler(web.RequestHandler):
+class ErrorHandler(web.RequestHandler):
     def get(self):
         self.write_error(404)
 
