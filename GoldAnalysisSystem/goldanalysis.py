@@ -1,5 +1,8 @@
 import base64
 import datetime
+import os
+import sqlite3
+import time
 from io import BytesIO
 import pandas as pd
 import numpy as np
@@ -10,8 +13,9 @@ from matplotlib import animation
 import mpl_toolkits.mplot3d.axes3d as p3
 from pandas.plotting import register_matplotlib_converters
 from mpl_toolkits.mplot3d import Axes3D
+import GoldAnalysisSystem.database_handler as dh
 
-from GoldAnalysisSystem.database_handler import BASE_DIR
+BASE_DIR = os.path.dirname(os.path.abspath('manage.py'))
 
 register_matplotlib_converters()
 
@@ -52,7 +56,7 @@ def getdata():
 
 
 def getdata_l():
-    data = pd.read_excel(BASE_DIR + '/alldata_filter.xlsx')
+    data = pd.read_excel(dh.BASE_DIR + '/alldata_filter.xlsx')
     return data
 
 
@@ -129,11 +133,14 @@ def plot_price_trend(time, name):
 
 
 def write_xdisplay(name, x, i):
+    origin = datetime.datetime.strptime('1900-01-01', "%Y-%m-%d")
+
     if name:
         x_display = []
         for index, value in enumerate(x):
+            x_new = (origin + datetime.timedelta(days=value)).strftime('%Y-%m')
             if index % i == 0:
-                x_display.append(value.strftime('%Y-%m'))
+                x_display.append(x_new)
             else:
                 x_display.append('')
     else:
@@ -159,6 +166,103 @@ def plot_price_trend_l(time, name):
     y_high = data['High'].values
     y_low = data['Low'].values
     y_settle = data['Settle'].values
+    plt.title(name, color='Navy', fontsize='large', fontweight='bold')
+    plt.figure(dpi=300)
+    # plt.figure(figsize=(10,5))
+    # border of axis x and y
+    ax = plt.gca()
+    ax.spines['top'].set_color('none')
+    ax.spines['bottom'].set_color('Navy')
+    ax.spines['left'].set_color('Navy')
+    ax.spines['right'].set_color('none')
+    plt.plot(x, y_open, label="Open Price")
+    plt.plot(x, y_close, label="Close Price")
+    plt.plot(x, y_high, label="High Price", ls='--')
+    plt.plot(x, y_low, label="Low Price", ls='--')
+    plt.plot(x, y_settle, label="Settle Price", marker='.')
+    # change axis value for longer than 1 month
+    if name == '6months':
+        x_display = write_xdisplay(name, x, 15)
+    elif name == '1year':
+        x_display = write_xdisplay(name, x, 30)
+    elif name == '2years':
+        x_display = write_xdisplay(name, x, 60)
+    elif name == '3years':
+        x_display = write_xdisplay(name, x, 90)
+    elif name == '5years':
+        x_display = write_xdisplay(name, x, 180)
+    elif name == '10years':
+        x_display = write_xdisplay(name, x, 360)
+    elif name == '12years':
+        x_display = write_xdisplay(name, x, 420)
+
+    # axis x and y
+    plt.xticks(x, x_display, color='Navy', rotation='45')
+    plt.yticks(color='Navy')
+    plt.legend()
+    # pwd = os.path.dirname(os.path.dirname(__file__))
+    # saveplace = pwd + '/static/pfas/img/' + name + '.png'
+    # plt.savefig(saveplace, transparent=True)
+    # use ascii save and load png
+    # put this in html :<embed id="pic0" src="data:image/png;base64,{{pic_1}}" />
+    buf = BytesIO()
+    plt.savefig(buf, transparent=True, format='png')
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    return data, name
+
+
+def connect_to_db():
+    try:
+        # db = psycopg2.connect(**db_postgre, sslmode='require')
+        db = sqlite3.connect(database=os.path.join(BASE_DIR, 'golddata.db'))
+        return db
+    except Exception:
+        print("connect DB failed")
+
+
+def exe_sql(cursor, col, delta):
+    sql0 = 'select '
+    sql1 = ' from golddata where golddata.date>='
+    sql2 = ' order by date asc'
+
+    i = 1
+    while True:
+        cursor.execute(sql0 + col + sql1 + str(delta) + sql2)
+        rows = cursor.fetchall()
+        if len(rows) == 0:
+            cursor.execute(sql0 + col + sql1 + str(delta - i) + sql2)
+            i += 1
+        else:
+            break
+    data = [x for r in rows for x in r]
+    return data
+
+
+def plot_price_trend_l_db(start_time, name):
+    # connect db
+    conn = connect_to_db()
+    cursor = conn.cursor()
+    # time handling
+    st_new = datetime.datetime.strptime(start_time, "%Y-%m-%d")
+    origin = datetime.datetime.strptime('1900-01-01', "%Y-%m-%d")
+    delta = (st_new-origin).days+2
+    open_p = exe_sql(cursor, 'open', delta)
+    close_p = exe_sql(cursor, 'close', delta)
+    high_p = exe_sql(cursor, 'high', delta)
+    low_p = exe_sql(cursor, 'low', delta)
+    settle_p = exe_sql(cursor, 'settle', delta)
+    # volume = exe_sql(cursor, 'volume', delta)
+    date = exe_sql(cursor, 'date', delta)
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    x = date
+    y_open = open_p
+    y_close = close_p
+    y_high = high_p
+    y_low = low_p
+    y_settle = settle_p
     plt.title(name, color='Navy', fontsize='large', fontweight='bold')
     plt.figure(dpi=300)
     # plt.figure(figsize=(10,5))
@@ -405,3 +509,4 @@ if __name__ == '__main__':
     # recordtime = datetime.datetime.strptime('2019-12-16', "%Y-%m-%d")
     # sixmonths = (recordtime - datetime.timedelta(days=180)).strftime('%Y-%m-%d')
     # plot_price_trend_l(sixmonths, '6months')
+    # plot_price_trend_l_db('2020-01-03', '3m')

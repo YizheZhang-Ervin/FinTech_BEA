@@ -15,8 +15,8 @@ db_postgre = {
            '-147.compute-1.amazonaws.com:5432/d9f3ajslqe7rqs ',
     'Heroku CLI': 'heroku pg:psql postgresql-dimensional-12453 --app bea-analysis'
 }
-db_sqlite3 = {'database': 'golddata.db'}
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+db_sqlite3 = {'database': os.path.join(BASE_DIR, 'golddata.db')}
 
 
 def open_excel(file_name):
@@ -85,7 +85,7 @@ class InsertsqlHandler(web.RequestHandler):
         operation = self.get_body_argument('operation', '')
         if operation:
             if operation == 'insert':
-                store_to(BASE_DIR + '/alldata_filter.xlsx')
+                store_to(BASE_DIR + '/new.xlsx')
         try:
             self.write('succeed')
         except Exception:

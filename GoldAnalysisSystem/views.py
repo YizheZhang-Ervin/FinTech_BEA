@@ -1,7 +1,7 @@
 import datetime
 from tornado import web
 from GoldAnalysisSystem.goldanalysis import plot_price_trend, gettime, plot_price_table, getorigintime, plot_animation, \
-    plot_3D, plot_diy, plot_price_trend_l
+    plot_3D, plot_diy, plot_price_trend_l_db
 from GoldAnalysisSystem import settings
 
 
@@ -57,31 +57,31 @@ class DashboardHandler(web.RequestHandler):
         elif action == '6months':
             # 6 months
             sixmonths = (recordtime - datetime.timedelta(days=180)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend_l(sixmonths, '6months')
+            time, name = plot_price_trend_l_db(sixmonths, '6months')
         elif action == '1year':
             # 1 year
             oneyear = (recordtime - datetime.timedelta(days=360)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend_l(oneyear, '1year')
+            time, name = plot_price_trend_l_db(oneyear, '1year')
         elif action == '2years':
             # 2 years
             twoyears = (recordtime - datetime.timedelta(days=720)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend_l(twoyears, '2years')
+            time, name = plot_price_trend_l_db(twoyears, '2years')
         elif action == '3years':
             # 3 years
             threeyears = (recordtime - datetime.timedelta(days=1080)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend_l(threeyears, '3years')
+            time, name = plot_price_trend_l_db(threeyears, '3years')
         elif action == '5years':
             # 5 years
             fiveyears = (recordtime - datetime.timedelta(days=1800)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend_l(fiveyears, '5years')
+            time, name = plot_price_trend_l_db(fiveyears, '5years')
         elif action == '10years':
             # 10 years
             tenyears = (recordtime - datetime.timedelta(days=3600)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend_l(tenyears, '10years')
+            time, name = plot_price_trend_l_db(tenyears, '10years')
         elif action == '12years':
             # 12 years
             twelveyears = (recordtime - datetime.timedelta(days=4320)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend_l(twelveyears, '12years')
+            time, name = plot_price_trend_l_db(twelveyears, '12years')
         elif action == '':
             time = ''
 
