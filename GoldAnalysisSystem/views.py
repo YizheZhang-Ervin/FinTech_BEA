@@ -1,8 +1,8 @@
 import datetime
 from tornado import web
-from GoldAnalysisSystem.goldanalysis_xlsx_api import plot_price_trend, gettime, plot_price_table, getorigintime, plot_animation, plot_3D
+from GoldAnalysisSystem.goldanalysis_xlsx_api import gettime, getorigintime, plot_price_table
 from GoldAnalysisSystem import settings
-from GoldAnalysisSystem.goldvisualiztion_db import plot_price_trend_l_db, plot_diy_db
+from GoldAnalysisSystem.goldvisualiztion_db import plot_price_trend_db, plot_diy_db, plot_3D_db, plot_animation_db
 
 
 class ToolsHandler(web.RequestHandler):
@@ -33,62 +33,62 @@ class DashboardHandler(web.RequestHandler):
         elif action == '1week':
             # 1 week
             aweek = (currenttime - datetime.timedelta(days=7)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend(aweek, '1week')
+            time, name = plot_price_trend_db(aweek, '1week')
         elif action == '2weeks':
             # 2 weeks
             twoweeks = (currenttime - datetime.timedelta(days=14)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend(twoweeks, '2weeks')
+            time, name = plot_price_trend_db(twoweeks, '2weeks')
         elif action == '3weeks':
             # 3 weeks
             threeweeks = (currenttime - datetime.timedelta(days=21)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend(threeweeks, '3weeks')
+            time, name = plot_price_trend_db(threeweeks, '3weeks')
         elif action == '1month':
             # 1 month
             onemonth = (currenttime - datetime.timedelta(days=30)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend(onemonth, '1month')
+            time, name = plot_price_trend_db(onemonth, '1month')
         elif action == '2months':
             # 2 months
             twomonths = (currenttime - datetime.timedelta(days=60)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend(twomonths, '2months')
+            time, name = plot_price_trend_db(twomonths, '2months')
         elif action == '3months':
             # 3 months
             threemonths = (currenttime - datetime.timedelta(days=90)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend(threemonths, '3months')
+            time, name = plot_price_trend_db(threemonths, '3months')
         elif action == '6months':
             # 6 months
             sixmonths = (recordtime - datetime.timedelta(days=180)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend_l_db(sixmonths, '6months')
+            time, name = plot_price_trend_db(sixmonths, '6months')
         elif action == '1year':
             # 1 year
             oneyear = (recordtime - datetime.timedelta(days=360)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend_l_db(oneyear, '1year')
+            time, name = plot_price_trend_db(oneyear, '1year')
         elif action == '2years':
             # 2 years
             twoyears = (recordtime - datetime.timedelta(days=720)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend_l_db(twoyears, '2years')
+            time, name = plot_price_trend_db(twoyears, '2years')
         elif action == '3years':
             # 3 years
             threeyears = (recordtime - datetime.timedelta(days=1080)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend_l_db(threeyears, '3years')
+            time, name = plot_price_trend_db(threeyears, '3years')
         elif action == '5years':
             # 5 years
             fiveyears = (recordtime - datetime.timedelta(days=1800)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend_l_db(fiveyears, '5years')
+            time, name = plot_price_trend_db(fiveyears, '5years')
         elif action == '10years':
             # 10 years
             tenyears = (recordtime - datetime.timedelta(days=3600)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend_l_db(tenyears, '10years')
+            time, name = plot_price_trend_db(tenyears, '10years')
         elif action == '12years':
             # 12 years
             twelveyears = (recordtime - datetime.timedelta(days=4320)).strftime('%Y-%m-%d')
-            time, name = plot_price_trend_l_db(twelveyears, '12years')
+            time, name = plot_price_trend_db(twelveyears, '12years')
         elif action == '':
             time = ''
 
         if action2 == '1line-animation':
-            type, name = plot_animation('All time animation')
+            type, name = plot_animation_db('All time animation')
         elif action2 == '3d':
-            time, name = plot_3D('All time 3D')
+            time, name = plot_3D_db('All time 3D')
             type = ''
         elif action2 == 'diy':
             type = ''
