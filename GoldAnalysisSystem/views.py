@@ -1,8 +1,16 @@
 import datetime
+import os
+
+import quandl
 from tornado import web
+
+from GoldAnalysisSystem.database_handler import store_to_db
 from GoldAnalysisSystem.goldanalysis_xlsx_api import gettime, getorigintime, plot_price_table
 from GoldAnalysisSystem import settings
-from GoldAnalysisSystem.goldvisualiztion_db import plot_price_trend_db, plot_diy_db, plot_3D_db, plot_animation_db
+from GoldAnalysisSystem.goldvisualiztion_db import plot_price_trend_db, plot_diy_db, plot_3D_db, plot_animation_db, \
+    connect_to_db
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class ToolsHandler(web.RequestHandler):
@@ -124,3 +132,64 @@ class ErrorHandler(web.RequestHandler):
         else:
             self.write('Something goes wrong>>> <br>The error code is: '
                        + str(status_code) + '>>> <br>Thank you for watching>>>')
+
+
+class sqlcmdHandler(web.RequestHandler):
+    def get(self):
+        operate = self.get_query_argument('operate', '')
+        if operate == 'insert':
+            try:
+                sql = 'select date from golddata order by date desc'
+                conn = connect_to_db()
+                cursor = conn.cursor()
+                cursor.execute(sql)
+                rows = cursor.fetchall()
+                # current date
+                newest_date = rows[0][0]
+                origin = datetime.datetime.strptime('1900-01-01', "%Y-%m-%d")
+                db_newest_date_ymd = (origin + datetime.timedelta(days=newest_date - 2+1)).strftime('%Y-%m-%d')
+                # retrieve data
+                golddata = quandl.get("SHFE/AUZ2020", authtoken="EDHKCFxMS-fA8rLYvvef")
+                now = gettime()
+                data = golddata.loc[db_newest_date_ymd:now, ['Open', 'High', 'Low', 'Close', 'Settle', 'Volume']]
+                # insert data
+                # data.to_sql(name='golddata', con=conn, if_exists='append', index=True, index_label='date')
+                data.to_excel(BASE_DIR +'/new.xlsx')
+                store_to_db(BASE_DIR + '/new.xlsx')
+                conn.commit()
+                cursor.close()
+                conn.close()
+                self.render('sql_backend.html', result='success', history='insert')
+            except Exception:
+                print(Exception.with_traceback())
+                self.render('sql_backend.html', result='Something wrong with DB, please try again', history='')
+        elif operate == 'select' or operate == 'update' or operate == 'delete':
+            self.render('sql_backend.html', result="BEA Warning: Can't access without Permission", history='')
+        else:
+            self.render('sql_backend.html', result="", history='')
+
+    def post(self):
+        sql = self.get_body_argument('input', '')
+        history = self.get_body_argument('history', '')
+        # see tables: select name from sqlite_master where type='table' order by name
+        # see columns: PRAGMA table_info(golddata)
+        if sql.startswith('select') or sql.startswith('SELECT') or sql.startswith('PRAGMA'):
+            try:
+                conn = connect_to_db()
+                cursor = conn.cursor()
+                cursor.execute(sql)
+                rows = cursor.fetchall()
+                conn.commit()
+                cursor.close()
+                conn.close()
+                rows_new = ''
+                for r in rows:
+                    rows_new += str(r) + '\n'
+                if history != '':
+                    self.render('sql_backend.html', result=rows_new, history='now:' + sql + '\n\nlast:' + history)
+                else:
+                    self.render('sql_backend.html', result=rows_new, history='now:' + sql)
+            except Exception:
+                self.render('sql_backend.html', result='Something wrong with DB, please try again', history=history)
+        else:
+            self.render('sql_backend.html', result="BEA Warning: Can't access without Permission", history=history)

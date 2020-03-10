@@ -15,7 +15,7 @@ db_postgre = {
            '-147.compute-1.amazonaws.com:5432/d9f3ajslqe7rqs ',
     'Heroku CLI': 'heroku pg:psql postgresql-dimensional-12453 --app bea-analysis'
 }
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 db_sqlite3 = {'database': os.path.join(BASE_DIR, 'golddata.db')}
 
 
@@ -54,7 +54,7 @@ def create_table():
     return 'success'
 
 
-def store_to(file_name):
+def store_to_db(file_name):
     # connect DB
     conn = connect_to_db()
     cursor = conn.cursor()
@@ -85,7 +85,7 @@ class InsertsqlHandler(web.RequestHandler):
         operation = self.get_body_argument('operation', '')
         if operation:
             if operation == 'insert':
-                store_to(BASE_DIR + '/new.xlsx')
+                store_to_db(BASE_DIR + '/new.xlsx')
         try:
             self.write('succeed')
         except Exception:

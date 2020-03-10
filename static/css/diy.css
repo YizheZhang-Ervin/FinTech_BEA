@@ -20,10 +20,47 @@ input::-webkit-input-placeholder{
     color:gold;
 }
 
+textarea::-webkit-input-placeholder{
+    color:gold;
+}
+
 .postform{
     filter:drop-shadow(20px 10px 10px gray);
 }
 
 .intro001{
     color:#9D8D65;
+}
+
+#ta0{
+margin-left:2%;
+width:95%;
+height:50px;
+background:rgba(0,0,0,0.8);
+border: 2px outset gold;
+font-size:17px;
+}
+
+.grid1{
+    margin-left:2%;
+    display:grid;
+    grid-template-rows:1fr;
+    grid-template-columns:50% 47%;
+    grid-column-gap: 0%;
+}
+
+.ta1{
+width:100%;
+height:400px;
+background:rgba(0,0,0,0.8);
+font-size:16px;
+border: 2px outset gold;
+}
+
+#ta2{
+margin-left:2%;
+width:95%;
+height:200px;
+background:rgba(0,0,0,0.8);
+border: 2px outset gold;
 }
