@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="" style="overflow:hidden;">
+<html lang="" style="overflow:scroll;">
 <head>
   <title>BEA GVS</title>
   <meta charset="utf-8">
@@ -18,7 +18,7 @@
         <li class="active"><a class="drop">Execute</a>
           <ul>
             <li><a href="javascript:document.getElementById('submit001').click()">Execute Command</a></li>
-            <li><a href="#">Execute Scripts (from file)</a></li>
+            <li><a href="javascript:document.getElementById('inputfile').click()">Execute Scripts (from file)</a></li>
           </ul>
         </li>
         <li><a class="drop">CRUD</a>
@@ -34,17 +34,21 @@
       <!-- ################################################################################################ -->
   </nav>
   <div id="pageintro" class="hoc clear" style="max-width:none;">
+    <input type="file" id="inputfile" style="display:none" accept=".sql" />
     <form action="/sql/cmd/" method="POST">
       <input type="submit" id="submit001" value="submit" style="display:none;">
       <article style="max-width:none;margin-top:-12%">
         <textarea id="ta0" placeholder=" Please Enter SQL below (Only Select Statement except admin)&#10; Execute By 'Ctrl+Enter' " disabled></textarea>
         <div class="grid1" >
           <textarea class="ta1" id='ta1' name="input" placeholder="Input here>>"></textarea>
-          <textarea class="ta1" name="history" placeholder="Last Command here>>" readonly>{% raw history %}</textarea>
+          <textarea class="ta1" id="ta10" name="history" placeholder="Last Command here>>" readonly>{% raw history %}</textarea>
         </div>
         <textarea id="ta2" name="result" placeholder="Result here>>" disabled>{% raw result %}</textarea>
+        <textarea id="ta100" name="lastsql" style="display:none;">{% raw lastsql %}</textarea>
       </article>
     </form>
+    <input id="ip001" placeholder="Date Transform,please type in days" >
+    <input id="ip002" placeholder="Date will display here" readonly>
   </div>
 
 </div>

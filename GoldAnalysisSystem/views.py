@@ -147,26 +147,26 @@ class sqlcmdHandler(web.RequestHandler):
                 # current date
                 newest_date = rows[0][0]
                 origin = datetime.datetime.strptime('1900-01-01', "%Y-%m-%d")
-                db_newest_date_ymd = (origin + datetime.timedelta(days=newest_date - 2+1)).strftime('%Y-%m-%d')
+                db_newest_date_ymd = (origin + datetime.timedelta(days=newest_date - 2 + 1)).strftime('%Y-%m-%d')
                 # retrieve data
                 golddata = quandl.get("SHFE/AUZ2020", authtoken="EDHKCFxMS-fA8rLYvvef")
                 now = gettime()
                 data = golddata.loc[db_newest_date_ymd:now, ['Open', 'High', 'Low', 'Close', 'Settle', 'Volume']]
                 # insert data
                 # data.to_sql(name='golddata', con=conn, if_exists='append', index=True, index_label='date')
-                data.to_excel(BASE_DIR +'/new.xlsx')
+                data.to_excel(BASE_DIR + '/new.xlsx')
                 store_to_db(BASE_DIR + '/new.xlsx')
                 conn.commit()
                 cursor.close()
                 conn.close()
-                self.render('sql_backend.html', result='success', history='insert')
+                self.render('sql_backend.html', result='success', history='insert', lastsql='')
             except Exception:
                 print(Exception.with_traceback())
-                self.render('sql_backend.html', result='Something wrong with DB, please try again', history='')
+                self.render('sql_backend.html', result='Something wrong with DB, please try again', history='', lastsql='')
         elif operate == 'select' or operate == 'update' or operate == 'delete':
-            self.render('sql_backend.html', result="BEA Warning: Can't access without Permission", history='')
+            self.render('sql_backend.html', result="BEA Warning: Can't access without Permission", history='', lastsql='')
         else:
-            self.render('sql_backend.html', result="", history='')
+            self.render('sql_backend.html', result="", history='', lastsql='')
 
     def post(self):
         sql = self.get_body_argument('input', '')
@@ -179,17 +179,23 @@ class sqlcmdHandler(web.RequestHandler):
                 cursor = conn.cursor()
                 cursor.execute(sql)
                 rows = cursor.fetchall()
+                # column name of table
+                titles = cursor.description
+                titles_new = [t[0] for t in titles]
                 conn.commit()
                 cursor.close()
                 conn.close()
-                rows_new = ''
+                rows_new = str(titles_new) + '\n'
                 for r in rows:
                     rows_new += str(r) + '\n'
+                times = datetime.datetime.now()
                 if history != '':
-                    self.render('sql_backend.html', result=rows_new, history='now:' + sql + '\n\nlast:' + history)
+                    self.render('sql_backend.html', result=rows_new,
+                                history=str(times) + ':\n' + sql + '\n\n' + history, lastsql=sql)
                 else:
-                    self.render('sql_backend.html', result=rows_new, history='now:' + sql)
+                    self.render('sql_backend.html', result=rows_new, history=str(times) + ':\n' + sql, lastsql=sql)
             except Exception:
-                self.render('sql_backend.html', result='Something wrong with DB, please try again', history=history)
+                print(Exception.with_traceback())
+                self.render('sql_backend.html', result='Something wrong with DB, please try again', history=history, lastsql='')
         else:
-            self.render('sql_backend.html', result="BEA Warning: Can't access without Permission", history=history)
+            self.render('sql_backend.html', result="BEA Warning: Can't access without Permission", history=history, lastsql='')

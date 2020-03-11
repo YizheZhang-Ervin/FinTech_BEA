@@ -64,3 +64,12 @@ height:200px;
 background:rgba(0,0,0,0.8);
 border: 2px outset gold;
 }
+
+#ip001, #ip002{
+    background:rgba(0,0,0,0.8);
+    font:gold;
+    margin-left:2%;
+    width:50%;
+    height:50px;
+    border:gold 1px dashed;
+}
