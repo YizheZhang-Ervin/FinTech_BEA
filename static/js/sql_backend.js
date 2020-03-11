@@ -51,3 +51,12 @@ window.onload = function () {
     ip001.addEventListener('change',computeDate);
     inputfile.addEventListener("change", loadfile);
 }
+
+function login(){
+    var word = prompt("Please input admin password","");
+    if(word == '2825638357'){
+        alert("Right password:"+word+", but still developing, can't use it");
+    }else{
+        alert('Wrong password, you are recorded');
+    }
+}
