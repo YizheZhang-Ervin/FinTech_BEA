@@ -1,5 +1,6 @@
 import datetime
 import os
+import traceback
 
 import quandl
 from tornado import web
@@ -7,8 +8,10 @@ from tornado import web
 from GoldAnalysisSystem.database_handler import store_to_db
 from GoldAnalysisSystem.goldanalysis_xlsx_api import gettime, getorigintime, plot_price_table
 from GoldAnalysisSystem import settings
-from GoldAnalysisSystem.goldvisualiztion_db import plot_price_trend_db, plot_diy_db, plot_3D_db, plot_animation_db, \
+from GoldAnalysisSystem.goldvisualization_db import plot_price_trend_db, plot_diy_db, plot_3D_db, plot_animation_db, \
     connect_to_db
+from GoldAnalysisSystem.goldvisualization_xau_db import plot_price_trend_db_xau, plot_animation_db_xau, plot_3D_db_xau, \
+    plot_diy_db_xau, plot_price_table_xau, connect_to_db_xau
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -31,7 +34,7 @@ class IndexHandler(web.RequestHandler):
 class DashboardHandler(web.RequestHandler):
     def get(self):
         currenttime = getorigintime()
-        recordtime = datetime.datetime.strptime('2019-12-16', "%Y-%m-%d")
+        # recordtime = datetime.datetime.strptime('2019-12-16', "%Y-%m-%d")
         name = ''
         try:
             action = self.get_query_argument('time', '')
@@ -69,31 +72,31 @@ class DashboardHandler(web.RequestHandler):
             time, name = plot_price_trend_db(threemonths, '3months')
         elif action == '6months':
             # 6 months
-            sixmonths = (recordtime - datetime.timedelta(days=180)).strftime('%Y-%m-%d')
+            sixmonths = (currenttime - datetime.timedelta(days=180)).strftime('%Y-%m-%d')
             time, name = plot_price_trend_db(sixmonths, '6months')
         elif action == '1year':
             # 1 year
-            oneyear = (recordtime - datetime.timedelta(days=360)).strftime('%Y-%m-%d')
+            oneyear = (currenttime - datetime.timedelta(days=360)).strftime('%Y-%m-%d')
             time, name = plot_price_trend_db(oneyear, '1year')
         elif action == '2years':
             # 2 years
-            twoyears = (recordtime - datetime.timedelta(days=720)).strftime('%Y-%m-%d')
+            twoyears = (currenttime - datetime.timedelta(days=720)).strftime('%Y-%m-%d')
             time, name = plot_price_trend_db(twoyears, '2years')
         elif action == '3years':
             # 3 years
-            threeyears = (recordtime - datetime.timedelta(days=1080)).strftime('%Y-%m-%d')
+            threeyears = (currenttime - datetime.timedelta(days=1080)).strftime('%Y-%m-%d')
             time, name = plot_price_trend_db(threeyears, '3years')
         elif action == '5years':
             # 5 years
-            fiveyears = (recordtime - datetime.timedelta(days=1800)).strftime('%Y-%m-%d')
+            fiveyears = (currenttime - datetime.timedelta(days=1800)).strftime('%Y-%m-%d')
             time, name = plot_price_trend_db(fiveyears, '5years')
         elif action == '10years':
             # 10 years
-            tenyears = (recordtime - datetime.timedelta(days=3600)).strftime('%Y-%m-%d')
+            tenyears = (currenttime - datetime.timedelta(days=3600)).strftime('%Y-%m-%d')
             time, name = plot_price_trend_db(tenyears, '10years')
         elif action == '12years':
             # 12 years
-            twelveyears = (recordtime - datetime.timedelta(days=4320)).strftime('%Y-%m-%d')
+            twelveyears = (currenttime - datetime.timedelta(days=4320)).strftime('%Y-%m-%d')
             time, name = plot_price_trend_db(twelveyears, '12years')
         elif action == '':
             time = ''
@@ -110,7 +113,7 @@ class DashboardHandler(web.RequestHandler):
             type = ''
 
         # Transfer parameters
-        self.render('dashboard.html', time=time, type=type, name=name, diychart='')
+        self.render('dashboard_SHFE.html', time=time, type=type, name=name, diychart='')
 
     def post(self, **kwargs):
         date001 = self.get_body_argument('date001', '')
@@ -118,9 +121,104 @@ class DashboardHandler(web.RequestHandler):
         data001 = self.get_body_arguments('data001', '')
         try:
             diychart = plot_diy_db(date001, name001, *data001)
-            self.render('dashboard.html', time='', type='', name='', diychart=diychart)
+            self.render('dashboard_SHFE.html', time='', type='', name='', diychart=diychart)
         except Exception:
-            self.render('dashboard.html', time='', type='', name='', diychart='')
+            self.render('dashboard_SHFE.html', time='', type='', name='', diychart='')
+
+
+class XAUDashboardHandler(web.RequestHandler):
+    def get(self):
+        currenttime = getorigintime()
+        name = ''
+        try:
+            action = self.get_query_argument('time', '')
+            action2 = self.get_query_argument('type', '')
+        except Exception:
+            action, action2 = '', ''
+
+        if action == 'days' or action == 'tables':
+            # 1 week table
+            aweek_table = (currenttime - datetime.timedelta(days=6)).strftime('%Y-%m-%d')
+            time, name = plot_price_table_xau(aweek_table, gettime())
+        elif action == '1week':
+            # 1 week
+            aweek = (currenttime - datetime.timedelta(days=7)).strftime('%Y-%m-%d')
+            time, name = plot_price_trend_db_xau(aweek, '1week')
+        elif action == '2weeks':
+            # 2 weeks
+            twoweeks = (currenttime - datetime.timedelta(days=14)).strftime('%Y-%m-%d')
+            time, name = plot_price_trend_db_xau(twoweeks, '2weeks')
+        elif action == '3weeks':
+            # 3 weeks
+            threeweeks = (currenttime - datetime.timedelta(days=21)).strftime('%Y-%m-%d')
+            time, name = plot_price_trend_db_xau(threeweeks, '3weeks')
+        elif action == '1month':
+            # 1 month
+            onemonth = (currenttime - datetime.timedelta(days=30)).strftime('%Y-%m-%d')
+            time, name = plot_price_trend_db_xau(onemonth, '1month')
+        elif action == '2months':
+            # 2 months
+            twomonths = (currenttime - datetime.timedelta(days=60)).strftime('%Y-%m-%d')
+            time, name = plot_price_trend_db_xau(twomonths, '2months')
+        elif action == '3months':
+            # 3 months
+            threemonths = (currenttime - datetime.timedelta(days=90)).strftime('%Y-%m-%d')
+            time, name = plot_price_trend_db_xau(threemonths, '3months')
+        elif action == '6months':
+            # 6 months
+            sixmonths = (currenttime - datetime.timedelta(days=180)).strftime('%Y-%m-%d')
+            time, name = plot_price_trend_db_xau(sixmonths, '6months')
+        elif action == '1year':
+            # 1 year
+            oneyear = (currenttime - datetime.timedelta(days=360)).strftime('%Y-%m-%d')
+            time, name = plot_price_trend_db_xau(oneyear, '1year')
+        elif action == '2years':
+            # 2 years
+            twoyears = (currenttime - datetime.timedelta(days=720)).strftime('%Y-%m-%d')
+            time, name = plot_price_trend_db_xau(twoyears, '2years')
+        elif action == '3years':
+            # 3 years
+            threeyears = (currenttime - datetime.timedelta(days=1080)).strftime('%Y-%m-%d')
+            time, name = plot_price_trend_db_xau(threeyears, '3years')
+        elif action == '5years':
+            # 5 years
+            fiveyears = (currenttime - datetime.timedelta(days=1800)).strftime('%Y-%m-%d')
+            time, name = plot_price_trend_db_xau(fiveyears, '5years')
+        elif action == '10years':
+            # 10 years
+            tenyears = (currenttime - datetime.timedelta(days=3600)).strftime('%Y-%m-%d')
+            time, name = plot_price_trend_db_xau(tenyears, '10years')
+        elif action == '12years':
+            # 12 years
+            twelveyears = (currenttime - datetime.timedelta(days=4320)).strftime('%Y-%m-%d')
+            time, name = plot_price_trend_db_xau(twelveyears, '12years')
+        elif action == '':
+            time = ''
+
+        if action2 == '1line-animation':
+            type, name = plot_animation_db_xau('All time animation')
+        elif action2 == '3d':
+            time, name = plot_3D_db_xau('All time 3D')
+            type = ''
+        elif action2 == 'diy':
+            type = ''
+            name = 'Please select Date/Data which you need to analyze'
+        else:
+            type = ''
+
+        # Transfer parameters
+        self.render('dashboard_LBMA.html', time=time, type=type, name=name, diychart='')
+
+    def post(self, **kwargs):
+        date001 = self.get_body_argument('date001', '')
+        name001 = self.get_body_argument('name001', '')
+        data001 = self.get_body_arguments('data001', '')
+        try:
+            diychart = plot_diy_db_xau(date001, name001, *data001)
+            self.render('dashboard_LBMA.html', time='', type='', name='', diychart=diychart)
+        except Exception:
+            print(Exception.with_traceback())
+            self.render('dashboard_LBMA.html', time='', type='', name='', diychart='')
 
 
 class ErrorHandler(web.RequestHandler):
@@ -144,6 +242,7 @@ class sqlcmdHandler(web.RequestHandler):
         operate = self.get_query_argument('operate', '')
         if operate == 'insert':
             try:
+                # golddata (SHFE) insert
                 sql = 'select date from golddata order by date desc'
                 conn = connect_to_db()
                 cursor = conn.cursor()
@@ -164,12 +263,34 @@ class sqlcmdHandler(web.RequestHandler):
                 conn.commit()
                 cursor.close()
                 conn.close()
+
+                # golddata (LBMA) insert
+                sql2 = 'select date from golddata_xau order by date desc'
+                conn2 = connect_to_db_xau()
+                cursor2 = conn2.cursor()
+                cursor2.execute(sql2)
+                rows_xau = cursor2.fetchall()
+                # current date
+                newest_date = rows_xau[0][0]
+                newest_date_ymd = datetime.datetime.strptime(newest_date, '%Y-%m-%d %H:%M:%S').date()
+                newest_date_ymd_plus = (newest_date_ymd + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+                # retrieve data
+                xau_gold_data = quandl.get("LBMA/GOLD", authtoken="EDHKCFxMS-fA8rLYvvef")
+                data_xau = xau_gold_data.loc[newest_date_ymd_plus:,
+                           ['USD (AM)', 'USD (PM)', 'GBP (AM)', 'GBP (PM)', 'EURO (AM)', 'EURO (PM)']]
+                # insert data
+                data_xau.to_sql(name='golddata_xau', con=conn2, if_exists='append', index=True, index_label='date')
+                conn2.commit()
+                cursor2.close()
+                conn2.close()
                 self.render('sql_backend.html', result='success', history='insert', lastsql='')
             except Exception:
-                print(Exception.with_traceback())
-                self.render('sql_backend.html', result='Something wrong with DB, please try again', history='', lastsql='')
+                traceback.print_exc()
+                self.render('sql_backend.html', result='Something wrong with DB, please try again', history='',
+                            lastsql='')
         elif operate == 'select' or operate == 'update' or operate == 'delete':
-            self.render('sql_backend.html', result="BEA Warning: Can't access without Permission", history='', lastsql='')
+            self.render('sql_backend.html', result="BEA Warning: Can't access without Permission", history='',
+                        lastsql='')
         else:
             self.render('sql_backend.html', result="", history='', lastsql='')
 
@@ -186,13 +307,17 @@ class sqlcmdHandler(web.RequestHandler):
                 rows = cursor.fetchall()
                 # column name of table
                 titles = cursor.description
-                titles_new = [t[0] for t in titles]
+                if titles:
+                    titles_new = [t[0] for t in titles]
+                else:
+                    titles_new = ''
                 conn.commit()
                 cursor.close()
                 conn.close()
                 rows_new = str(titles_new) + '\n'
                 for r in rows:
                     rows_new += str(r) + '\n'
+
                 times = datetime.datetime.now()
                 if history != '':
                     self.render('sql_backend.html', result=rows_new,
@@ -200,7 +325,9 @@ class sqlcmdHandler(web.RequestHandler):
                 else:
                     self.render('sql_backend.html', result=rows_new, history=str(times) + ':\n' + sql, lastsql=sql)
             except Exception:
-                print(Exception.with_traceback())
-                self.render('sql_backend.html', result='Something wrong with DB, please try again', history=history, lastsql='')
+                traceback.print_exc()
+                self.render('sql_backend.html', result='Something wrong with DB, please try again', history=history,
+                            lastsql='')
         else:
-            self.render('sql_backend.html', result="BEA Warning: Can't access without Permission", history=history, lastsql='')
+            self.render('sql_backend.html', result="BEA Warning: Can't access without Permission", history=history,
+                        lastsql='')

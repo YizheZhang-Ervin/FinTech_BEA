@@ -144,7 +144,7 @@ nav ul, nav ol{margin:0; padding:0; list-style:none;}
 
 /* Top Navigation */
 #mainav{text-align:center;}
-#mainav ul{text-transform:uppercase;}
+#mainav ul{text-transform:none;}
 #mainav ul ul{z-index:9999; position:absolute; width:180px; text-transform:none; text-align:left;}
 #mainav ul ul ul{left:180px; top:0;}
 #mainav li{display:inline-block; position:relative; margin:0; padding:0;}

@@ -4,16 +4,21 @@ import sqlite3
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
-
 import numpy as np
+import quandl
 from matplotlib import animation
-
-from GoldAnalysisSystem.goldanalysis_xlsx_api import getorigintime
+from GoldAnalysisSystem.goldanalysis_xlsx_api import getorigintime, time_judge
 
 BASE_DIR = os.path.dirname(os.path.abspath('manage.py'))
 
 
-def connect_to_db():
+def get_xau_data_tosql():
+    conn = connect_to_db_xau()
+    xau_data = quandl.get("LBMA/GOLD", authtoken="EDHKCFxMS-fA8rLYvvef")
+    xau_data.to_sql(name='golddata_xau', con=conn, if_exists='append', index=True, index_label='date')
+
+
+def connect_to_db_xau():
     try:
         # db = psycopg2.connect(**db_postgre, sslmode='require')
         db = sqlite3.connect(database=os.path.join(BASE_DIR, 'golddata.db'))
@@ -22,38 +27,29 @@ def connect_to_db():
         print("connect DB failed")
 
 
-def exe_sql(cursor, col, delta):
-    sql0 = 'select '
-    sql1 = ' from golddata where golddata.date>='
-    sql2 = ' order by date asc'
+def exe_sql_xau(cursor, col, ymdhms):
+    sql0 = 'select "'
+    sql1 = '" from golddata_xau where golddata_xau.date>="'
+    sql2 = '" order by date asc'
 
-    i = 1
-    while True:
-        cursor.execute(sql0 + col + sql1 + str(delta) + sql2)
-        rows = cursor.fetchall()
-        if len(rows) == 0:
-            cursor.execute(sql0 + col + sql1 + str(delta - i) + sql2)
-            i += 1
-        else:
-            break
+    cursor.execute(sql0 + col + sql1 + str(ymdhms) + sql2)
+    rows = cursor.fetchall()
     data = [x for r in rows for x in r]
     return data
 
 
-def write_xdisplay_db(name, x, i):
-    origin = datetime.datetime.strptime('1900-01-01', "%Y-%m-%d")
-
+def write_xdisplay_db_xau(name, x, i):
     if name:
         x_display = []
         for index, value in enumerate(x):
             if name == '1week' or name == '2weeks' or name == '3weeks' or name == '1month' or name == '2months' or name == '3 month':
-                x_new = (origin + datetime.timedelta(days=value)).strftime('%m-%d')
+                x_new = value.strftime('%m-%d')
                 if index % i == 0:
                     x_display.append(x_new)
                 else:
                     x_display.append('')
             else:
-                x_new = (origin + datetime.timedelta(days=value)).strftime('%Y-%m')
+                x_new = value.strftime('%Y-%m')
                 if index % i == 0:
                     x_display.append(x_new)
                 else:
@@ -65,31 +61,28 @@ def write_xdisplay_db(name, x, i):
     return x_display
 
 
-def plot_price_trend_db(start_time, name):
+def plot_price_trend_db_xau(start_time, name):
     # connect db
-    conn = connect_to_db()
+    conn = connect_to_db_xau()
     cursor = conn.cursor()
     # time handling
-    st_new = datetime.datetime.strptime(start_time, "%Y-%m-%d")
-    origin = datetime.datetime.strptime('1900-01-01', "%Y-%m-%d")
-    delta = (st_new - origin).days + 2
-    open_p = exe_sql(cursor, 'open', delta)
-    close_p = exe_sql(cursor, 'close', delta)
-    high_p = exe_sql(cursor, 'high', delta)
-    low_p = exe_sql(cursor, 'low', delta)
-    settle_p = exe_sql(cursor, 'settle', delta)
-    # volume = exe_sql(cursor, 'volume', delta)
-    date = exe_sql(cursor, 'date', delta)
+    ymdhms = start_time + ' 00:00:00'
+    usd_am = exe_sql_xau(cursor, 'USD (AM)', ymdhms)
+    usd_pm = exe_sql_xau(cursor, 'USD (PM)', ymdhms)
+    gbp_am = exe_sql_xau(cursor, 'GBP (AM)', ymdhms)
+    gbp_pm = exe_sql_xau(cursor, 'GBP (PM)', ymdhms)
+    euro_am = exe_sql_xau(cursor, 'EURO (AM)', ymdhms)
+    euro_pm = exe_sql_xau(cursor, 'EURO (PM)', ymdhms)
+    date = exe_sql_xau(cursor, 'date', ymdhms)
     conn.commit()
     cursor.close()
     conn.close()
 
-    x = date
-    y_open = open_p
-    y_close = close_p
-    y_high = high_p
-    y_low = low_p
-    y_settle = settle_p
+    x = [datetime.datetime.strptime(d, '%Y-%m-%d %H:%M:%S').date() for d in date]
+    y_usdam = usd_am
+    y_usdpm = usd_pm
+    y_gbpam = gbp_am
+    y_gbppm = gbp_pm
     plt.title(name, color='Navy', fontsize='large', fontweight='bold')
     plt.figure(dpi=300)
     # plt.figure(figsize=(10,5))
@@ -99,32 +92,32 @@ def plot_price_trend_db(start_time, name):
     ax.spines['bottom'].set_color('Navy')
     ax.spines['left'].set_color('Navy')
     ax.spines['right'].set_color('none')
-    plt.plot(x, y_open, label="Open Price")
-    plt.plot(x, y_close, label="Close Price")
-    plt.plot(x, y_high, label="High Price", ls='--')
-    plt.plot(x, y_low, label="Low Price", ls='--')
-    plt.plot(x, y_settle, label="Settle Price", marker='.')
+    plt.plot(x, y_usdam, label="USD(AM)")
+    plt.plot(x, y_usdpm, label="USD(PM)")
+    plt.plot(x, y_gbpam, label="GBP(AM)", ls='--')
+    plt.plot(x, y_gbppm, label="GBP(PM)", ls='--')
+
     # change axis value for longer than 1 month
     if name == '2months':
-        x_display = write_xdisplay_db(name, x, 3)
+        x_display = write_xdisplay_db_xau(name, x, 3)
     elif name == '3months':
-        x_display = write_xdisplay_db(name, x, 7)
+        x_display = write_xdisplay_db_xau(name, x, 7)
     elif name == '6months':
-        x_display = write_xdisplay_db(name, x, 15)
+        x_display = write_xdisplay_db_xau(name, x, 15)
     elif name == '1year':
-        x_display = write_xdisplay_db(name, x, 30)
+        x_display = write_xdisplay_db_xau(name, x, 30)
     elif name == '2years':
-        x_display = write_xdisplay_db(name, x, 60)
+        x_display = write_xdisplay_db_xau(name, x, 60)
     elif name == '3years':
-        x_display = write_xdisplay_db(name, x, 90)
+        x_display = write_xdisplay_db_xau(name, x, 90)
     elif name == '5years':
-        x_display = write_xdisplay_db(name, x, 180)
+        x_display = write_xdisplay_db_xau(name, x, 180)
     elif name == '10years':
-        x_display = write_xdisplay_db(name, x, 360)
+        x_display = write_xdisplay_db_xau(name, x, 360)
     elif name == '12years':
-        x_display = write_xdisplay_db(name, x, 420)
+        x_display = write_xdisplay_db_xau(name, x, 420)
     else:
-        x_display = write_xdisplay_db(name, x, 1)
+        x_display = write_xdisplay_db_xau(name, x, 1)
     # axis x and y
     plt.xticks(x, x_display, color='Navy', rotation='45')
     plt.yticks(color='Navy')
@@ -140,27 +133,25 @@ def plot_price_trend_db(start_time, name):
     return data, name
 
 
-def plot_diy_db(start_time, name, *datatype):
+def plot_diy_db_xau(start_time, name, *datatype):
     # connect db
-    conn = connect_to_db()
+    conn = connect_to_db_xau()
     cursor = conn.cursor()
     # cols
     columns = list(datatype)
     # time handling
-    st_new = datetime.datetime.strptime(start_time, "%Y-%m-%d")
-    origin = datetime.datetime.strptime('1900-01-01', "%Y-%m-%d")
-    delta = (st_new - origin).days + 2
+    ymdhms = start_time + ' 00:00:00'
     # get data
     cols = {}
     for i in columns:
-        cols[i] = exe_sql(cursor, str(i), delta)
-    date = exe_sql(cursor, 'date', delta)
+        cols[i] = exe_sql_xau(cursor, str(i), ymdhms)
+    date = exe_sql_xau(cursor, 'date', ymdhms)
     conn.commit()
     cursor.close()
     conn.close()
 
     # set x
-    x = date
+    x = [datetime.datetime.strptime(d, '%Y-%m-%d %H:%M:%S').date() for d in date]
     plt.title(name, color='Navy', fontsize='large', fontweight='bold')
     plt.figure(dpi=300)
 
@@ -173,29 +164,29 @@ def plot_diy_db(start_time, name, *datatype):
 
     # change axis value for longer than 1 month
     if 0 <= len(date) <= 29:
-        x_display = write_xdisplay_db(name, x, 1)
+        x_display = write_xdisplay_db_xau(name, x, 1)
     elif 30 <= len(date) <= 89:
-        x_display = write_xdisplay_db(name, x, 7)
+        x_display = write_xdisplay_db_xau(name, x, 7)
     elif 90 <= len(date) <= 179:
-        x_display = write_xdisplay_db(name, x, 15)
+        x_display = write_xdisplay_db_xau(name, x, 15)
     elif 180 <= len(date) <= 359:
-        x_display = write_xdisplay_db(name, x, 30)
+        x_display = write_xdisplay_db_xau(name, x, 30)
     elif 360 <= len(date) <= 719:
-        x_display = write_xdisplay_db(name, x, 60)
+        x_display = write_xdisplay_db_xau(name, x, 60)
     elif 720 <= len(date) <= 1079:
-        x_display = write_xdisplay_db(name, x, 90)
+        x_display = write_xdisplay_db_xau(name, x, 90)
     elif 1080 <= len(date) <= 1799:
-        x_display = write_xdisplay_db(name, x, 180)
+        x_display = write_xdisplay_db_xau(name, x, 180)
     elif 1800 <= len(date) <= 3599:
-        x_display = write_xdisplay_db(name, x, 360)
+        x_display = write_xdisplay_db_xau(name, x, 360)
     elif len(date) >= 3599:
-        x_display = write_xdisplay_db(name, x, 420)
+        x_display = write_xdisplay_db_xau(name, x, 420)
 
     # diy plot
     for i in columns:
-        if i == 'settle':
+        if i == 'USD (AM)':
             plt.plot(x, cols[i], label=i + ' Price', marker='.')
-        elif i == 'high' or i == 'low':
+        elif i == 'GBP (AM)' or i == 'GBP (PM)':
             plt.plot(x, cols[i], label=i + ' Price', ls='--')
         else:
             plt.plot(x, cols[i], label=i + ' Price')
@@ -214,31 +205,27 @@ def plot_diy_db(start_time, name, *datatype):
     return data
 
 
-def plot_3D_db(name):
+def plot_3D_db_xau(name):
     # connect db
-    conn = connect_to_db()
+    conn = connect_to_db_xau()
     cursor = conn.cursor()
     # time handling
     currenttime = getorigintime()
     threemonths = (currenttime - datetime.timedelta(days=90)).strftime('%Y-%m-%d')
-    st_new = datetime.datetime.strptime(threemonths, "%Y-%m-%d")
-    origin = datetime.datetime.strptime('1900-01-01', "%Y-%m-%d")
-    delta = (st_new - origin).days + 2
-    # open_p = exe_sql(cursor, 'open', delta)
-    # close_p = exe_sql(cursor, 'close', delta)
-    # high_p = exe_sql(cursor, 'high', delta)
-    # low_p = exe_sql(cursor, 'low', delta)
-    settle_p = exe_sql(cursor, 'settle', delta)
-    volume = exe_sql(cursor, 'volume', delta)
-    date = exe_sql(cursor, 'date', delta)
+    ymdhms = threemonths + ' 00:00:00'
+
+    usd_am = exe_sql_xau(cursor, 'USD (AM)', ymdhms)
+    usd_pm = exe_sql_xau(cursor, 'USD (PM)', ymdhms)
+
+    date = exe_sql_xau(cursor, 'date', ymdhms)
     conn.commit()
     cursor.close()
     conn.close()
 
     # data
     x = [i for i in range(1, len(date) + 1)]
-    y = settle_p
-    z = volume
+    y = [i if i else 0 for i in usd_am]
+    z = [i if i else 0 for i in usd_pm]
 
     fig = plt.figure()
     ax = fig.gca(projection='3d')
@@ -251,8 +238,8 @@ def plot_3D_db(name):
     ax.w_yaxis.set_pane_color((0.2, 0.2, 0.2, 1.0))
     ax.w_zaxis.set_pane_color((0.25, 0.25, 0.25, 1.0))
     ax.set_xlabel('Days')
-    ax.set_ylabel('Settle Price')
-    ax.set_zlabel('Volume')
+    ax.set_ylabel('USD (AM)')
+    ax.set_zlabel('USD (PM)')
     ax.view_init(elev=35, azim=-45)
     plt.xticks(color='Navy')
     plt.yticks(color='Navy')
@@ -270,29 +257,24 @@ def plot_3D_db(name):
     return data, name
 
 
-def plot_animation_db(name):
+def plot_animation_db_xau(name):
     # connect db
-    conn = connect_to_db()
+    conn = connect_to_db_xau()
     cursor = conn.cursor()
     # time handling
     currenttime = getorigintime()
     threemonths = (currenttime - datetime.timedelta(days=90)).strftime('%Y-%m-%d')
-    st_new = datetime.datetime.strptime(threemonths, "%Y-%m-%d")
-    origin = datetime.datetime.strptime('1900-01-01', "%Y-%m-%d")
-    delta = (st_new - origin).days + 2
-    # open_p = exe_sql(cursor, 'open', delta)
-    # close_p = exe_sql(cursor, 'close', delta)
-    # high_p = exe_sql(cursor, 'high', delta)
-    # low_p = exe_sql(cursor, 'low', delta)
-    settle_p = exe_sql(cursor, 'settle', delta)
-    # volume = exe_sql(cursor, 'volume', delta)
-    date = exe_sql(cursor, 'date', delta)
+    ymdhms = threemonths + ' 00:00:00'
+
+    usd_am = exe_sql_xau(cursor, 'USD (AM)', ymdhms)
+    date = exe_sql_xau(cursor, 'date', ymdhms)
+
     conn.commit()
     cursor.close()
     conn.close()
 
     # data
-    y = settle_p
+    y = [i if i else 0 for i in usd_am]
     x = [i for i in range(1, len(date) + 1)]
     # moving average for 3 days
     y_new = [(y[i] + y[i + 1] + y[i + 2]) / 3 if 0 < i < len(y) - 3 else np.NaN for i in range(len(y) - 2)]
@@ -304,10 +286,10 @@ def plot_animation_db(name):
     fig, ax = plt.subplots()
     ax.grid(True)
     ax.set_xlabel('Days')
-    ax.set_ylabel('Settle Price')
+    ax.set_ylabel('USD (AM) Price')
     ax.xaxis.label.set_color('#0028FF')
     ax.yaxis.label.set_color('#0028FF')
-    line, = ax.plot(x, y, color='#0028FF', label='Settle Price')
+    line, = ax.plot(x, y, color='#0028FF', label='USD (AM) Price')
     line2, = ax.plot(x_new, y_new, color='#9B6A12', label='Moving Average(3days)')
     ax.legend()
     text_pt = plt.text(4, 0.8, '', fontsize=10, color='#0028FF')
@@ -350,3 +332,34 @@ def plot_animation_db(name):
     # return ani.to_html5_video()
     return ani.to_jshtml(), name
 
+
+def plot_price_table_xau(time, name):
+    golddata = quandl.get("LBMA/GOLD", authtoken="EDHKCFxMS-fA8rLYvvef")
+    timenow = datetime.datetime.now().strftime('%Y-%m-%d')
+    currenttime_ymd = str(timenow)
+    start = time_judge(time, golddata, 'forward', 'short')
+    end = time_judge(currenttime_ymd, golddata, 'back', 'short')
+    data = golddata.loc[start:end, ['USD (AM)', 'USD (PM)', 'GBP (AM)', 'GBP (PM)']]
+    plt.figure()
+    ax = plt.gca()
+    ax.spines['top'].set_color('none')
+    ax.spines['bottom'].set_color('none')
+    ax.spines['left'].set_color('none')
+    ax.spines['right'].set_color('none')
+    plt.xticks([])
+    plt.yticks([])
+    col_labels = ['USD (AM)', 'USD (PM)', 'GBP (AM)', 'GBP (PM)']
+    row_labels = data.index.strftime('%m-%d')
+    table_vals = data.values.tolist()
+    cc_col = ['none' for i in range(len(col_labels))]
+    cc = [cc_col for i in range(len(row_labels))]
+    cc_row = ['none' for i in range(len(row_labels))]
+    plt.table(cellText=table_vals, rowLabels=row_labels, colLabels=col_labels, loc='center', cellColours=cc,
+              rowColours=cc_row, colColours=cc_col)
+    # pwd = os.path.dirname(os.path.dirname(__file__))
+    # saveplace = pwd + '/static/pfas/img/' + name + '.png'
+    # plt.savefig(saveplace, transparent=True)
+    buf = BytesIO()
+    plt.savefig(buf, transparent=True, format='png')
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    return data, name
