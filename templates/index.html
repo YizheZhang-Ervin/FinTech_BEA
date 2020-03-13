@@ -137,7 +137,7 @@
       <li class="one_quarter">
         <article><a href="#"><i class="icon btmspace-30 fa fa-ioxhost"></i></a>
           <h6 class="heading font-x1"><a href="https://fin-analysis.herokuapp.com/">NIA7-FAS(Flask)</a></h6>
-          <p class="intro001"><i>Financial Analysis System</i> <br>aimed at analysis of different financial products[&hellip;]</p>
+          <p class="intro001"><i>Financial Analysis System</i> <br>aimed at analysis of different financial products and Hot News Data[&hellip;]</p>
         </article>
       </li>
       <li class="one_quarter">
@@ -208,13 +208,15 @@
         <a href="https://ervinzhang.pythonanywhere.com/" target="_blank" style="text-decoration:underline;">(My website link)</a>
       </p>
 
-      <form method="post" action="#">
+      <form method="post" action="">
         <fieldset>
+          {% raw xsrf_form_html() %}
           <input class="btmspace-15" type="text" value="" placeholder="Name">
           <input class="btmspace-15" type="text" value="" placeholder="Email">
-          <button type="submit" value="submit">Submit</button>
+          <button type="submit" value="submit" style="display:none">Submit</button>
         </fieldset>
       </form>
+      <button type="button" onclick="window.location.href='https://ervinzhang.pythonanywhere.com/#4'">Submit</button>
     </div>
     <div class="one_third">
       <h6 class="heading">Major Events</h6>

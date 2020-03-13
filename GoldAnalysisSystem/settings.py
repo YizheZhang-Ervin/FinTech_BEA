@@ -12,4 +12,5 @@ setting = {
     'template_path': os.path.join(BASE_DIR, 'templates'),
     'static_path': os.path.join(BASE_DIR, 'static'),
     'debug': False,
+    'xsrf_cookies': True,
 }

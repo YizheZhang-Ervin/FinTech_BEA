@@ -22,6 +22,11 @@ class IndexHandler(web.RequestHandler):
     def get(self):
         self.render(settings.setting['template_path'] + '/index.html')
 
+    def post(self):
+        name = self.get_body_argument('Name', '')
+        email = self.get_body_argument('Email', '')
+        self.write('succeed!' + name + email)
+
 
 class DashboardHandler(web.RequestHandler):
     def get(self):
