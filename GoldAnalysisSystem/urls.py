@@ -1,6 +1,6 @@
 from GoldAnalysisSystem.database_handler import InsertsqlHandler
 from GoldAnalysisSystem.views import IndexHandler, DashboardHandler, ToolsHandler, ErrorHandler, sqlcmdHandler, \
-    XAUDashboardHandler
+    XAUDashboardHandler, pyjscmdHandler, webHandler
 
 urlpatterns = [
     (r'/', IndexHandler),
@@ -8,7 +8,9 @@ urlpatterns = [
     (r'/xau/dashboard/', XAUDashboardHandler),
     (r'/tools/', ToolsHandler),
     # (r'/sql/', InsertsqlHandler),
-    (r'/sql/cmd/', sqlcmdHandler),
+    (r'/cmd/sql/', sqlcmdHandler),
+    (r'/cmd/pyjs/', pyjscmdHandler),
+    (r'/cmd/web/', webHandler),
     (r'.*', ErrorHandler),
 
 ]

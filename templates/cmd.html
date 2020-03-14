@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>CMD</title>
+    <link rel="stylesheet" href="{{ static_url('css/cmd.css')}}">
+    <link rel="shortcut icon" href="{{ static_url('img/homepage/favicon.ico') }}">
+    <script src="{{ static_url('js/cmd.js')}}"></script>
+</head>
+<body oncontextmenu=self.event.returnValue=false onselectstart="return false">
+<a href="/" style="color:white;font-size:20px;text-decoration:none;">Back>></a>
+<div class="choice">
+    <span>Python Shell</span><input type="radio" name="Shell" value="Python Shell" onchange="choose('PythonShell')" checked/>
+    <br>
+    <span>JavaScript Shell</span><input type="radio" name="Shell" value="JavaScript Shell" onchange="choose('JavaScriptShell')" />
+</div>
+<div id="div001" class="window">
+    <div class="title">
+        <span style="margin-left:1%">Python Shell</span>
+    </div>
+    <div id="text">
+        <ul>
+            <li>Embedded Python [Version 1.0.10101.010]</li>
+            <li>(c) 2020 Super Python. All command accepted.</li>
+        </ul>
+        <form action="/cmd/pyjs/" method="post">
+            {% raw xsrf_form_html() %}
+            <button type="submit">Run Code</button>
+            <div>
+                <span style="margin-left:10px">>>></span>
+                <input id="input000" type="text" name="input" value="{{input}}">
+            </div>
+            <textarea readonly="readonly" name="textarea">{{ output }}</textarea>
+        </form>
+    </div>
+
+</div>
+<div id="div002" class="window" style="display:none">
+    <div class="title">
+        <span style="margin-left:1%">JavaScript Shell</span>
+    </div>
+    <div id="text2">
+        <ul>
+            <li>Embedded JavaScript [Version 1.0.10101.010]</li>
+            <li>(c) 2020 Super JavaScript. All command accepted.</li>
+        </ul>
+        <div>
+            <span style="margin-left:10px">>>></span>
+            <input id="input001" type="text" name="input" onkeydown="execjs(event)">
+        </div>
+        <textarea id="output001" readonly="readonly" name="textarea"></textarea>
+    </div>
+
+</div>
+</body>
+</html>

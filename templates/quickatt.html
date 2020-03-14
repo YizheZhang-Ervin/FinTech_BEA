@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="shortcut icon" href="{{ static_url('img/homepage/favicon.ico') }}">
+        <title>Quick-Attempt HTML</title>
+        <script>
+            function gettext(){
+                let txt = document.getElementById('text001');
+                let frm = document.getElementById('frame001');
+                frm.setAttribute("srcdoc",txt.value);
+
+            }
+            function settext(){
+                let txt = document.getElementById('text001');
+                txt.value="<!DOCTYPE HTML>\n<html>\n <head>\n  <title></title>\n  <meta charset='utf-8'>\n  <style></style>\n </head>\n <body>\n\n </body>\n</html>";
+            }
+        </script>
+    </head>
+
+    <body background="{{ static_url('img/homepage/backgrounds/bg-part0.png') }}" oncontextmenu=self.event.returnValue=false>
+    <div style="color:white;font-size:27px;line-height:50px;">
+        <a href="/" style="color:white;text-decoration:none">
+            <b><i>Quick Attempt of HTML/CSS/JavaScript</i></b>
+        </a><br>
+        <button onclick="gettext()" style="color:orange;background-color:transparent;font-size:20px">Run Code</button>
+        <button onclick="settext()" style="color:orange;background-color:transparent;font-size:20px">Reset Code</button>
+    </div>
+        <div style="display:grid;grid-template-columns:49% 49%;grid-template-rows:100%;grid-gap:1%;">
+            <div style="grid-column:0；grid-row:0;height:1000px">
+                <textarea id="text001" style="height:100%;width:100%;background:rgba(0,0,0,0.8);color:white;font-size:18px;overflow-y:scroll;overflow-x:auto;"></textarea>
+            </div>
+
+            <div style="grid-column:1；grid-row:0;height:1000px">
+                <iframe id="frame001" style="height:100%;width:100%;background:#F5F5DC"></iframe>
+            </div>
+
+        </div>
+    </body>
+
+</html>

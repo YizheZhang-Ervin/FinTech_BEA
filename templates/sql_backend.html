@@ -23,10 +23,10 @@
         </li>
         <li><a class="drop">CRUD</a>
           <ul>
-            <li><a title="download up-to-date data" href="/sql/cmd/?operate=insert">Create(Insert)</a></li>
-            <li><a href="/sql/cmd/?operate=select">Retrieve(Select)</a></li>
-            <li><a href="/sql/cmd/?operate=update">Update</a></li>
-            <li><a href="/sql/cmd/?operate=delete">Delete</a></li>
+            <li><a title="download up-to-date data" href="/cmd/sql/?operate=insert">Create(Insert)</a></li>
+            <li><a href="/cmd/sql/?operate=select">Retrieve(Select)</a></li>
+            <li><a href="/cmd/sql/?operate=update">Update</a></li>
+            <li><a href="/cmd/sql/?operate=delete">Delete</a></li>
           </ul>
         </li>
         <li><a class="drop">Others</a>
@@ -39,7 +39,7 @@
   </nav>
   <div id="pageintro" class="hoc clear" style="max-width:none;">
     <input type="file" id="inputfile" style="display:none" accept=".sql" />
-    <form action="/sql/cmd/" method="POST">
+    <form action="/cmd/sql/" method="POST">
       <input type="submit" id="submit001" value="submit" style="display:none;">
       <article style="max-width:none;margin-top:-12%">
         <textarea id="ta0" placeholder=" Please Enter SQL below (Only Select Statement except admin)&#10; Execute By 'Ctrl+Enter', use 'Up' to view history command" disabled></textarea>
