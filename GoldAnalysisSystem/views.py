@@ -370,14 +370,12 @@ class TranslatorHandler(web.RequestHandler):
                 return True
             except ValueError:
                 pass
-
             try:
                 import unicodedata
                 unicodedata.numeric(s)
                 return True
             except (TypeError, ValueError):
                 pass
-
             return False
 
         def callg(word):
@@ -385,9 +383,22 @@ class TranslatorHandler(web.RequestHandler):
             translator_g = Translator()
             return translator_g.translate(word, src='zh-cn', dest='en').text.lower()
 
+        def check_contain_chinese(sentence):
+            for ch in sentence:
+                if u'\u4e00' <= ch <= u'\u9fff':
+                    return True
+
+        def reverse_transfer(sentence):
+            from translate import Translator
+            # 在任何两种语言之间，中文翻译成英文
+            translator_ec = Translator(from_lang="english", to_lang="chinese")
+            return translator_ec.translate(sentence)
+
         def translator(sentence):
-            if is_number(sentence) or isalpha(sentence) or isalnum(sentence):
+            if is_number(sentence):
                 return sentence
+            elif not check_contain_chinese(sentence):
+                return reverse_transfer(sentence)
             else:
                 modal = ['吧', '罢', '呗,''啵', '的', '家', '啦,''来', '了', '嘞', '哩', '咧', '咯', '啰', '喽,''吗', '嘛', '么', '哪',
                          '呢', '呐', '呵', '哈', '则', '哉', '呸', '罢了', '啊', '呃', '欸', '哇', '呀', '耶', '哟', '呕', '噢', '呦']
