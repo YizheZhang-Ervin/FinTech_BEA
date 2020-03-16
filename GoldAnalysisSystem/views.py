@@ -3,6 +3,7 @@ import os
 import traceback
 
 import quandl
+from numpy.core.defchararray import isalpha, isalnum
 from tornado import web
 
 from GoldAnalysisSystem.database_handler import store_to_db
@@ -379,17 +380,24 @@ class TranslatorHandler(web.RequestHandler):
 
             return False
 
+        def callg(word):
+            from googletrans import Translator
+            translator_g = Translator()
+            return translator_g.translate(word, src='zh-cn', dest='en').text.lower()
+
         def translator(sentence):
-            if is_number(sentence):
+            if is_number(sentence) or isalpha(sentence) or isalnum(sentence):
                 return sentence
             else:
+                modal = ['吧', '罢', '呗,''啵', '的', '家', '啦,''来', '了', '嘞', '哩', '咧', '咯', '啰', '喽,''吗', '嘛', '么', '哪',
+                         '呢', '呐', '呵', '哈', '则', '哉', '呸', '罢了', '啊', '呃', '欸', '哇', '呀', '耶', '哟', '呕', '噢', '呦']
                 # divide sentence
                 words = jieba.cut(sentence, cut_all=False)
-                words_list = [x for x in words]
+                words_list = [x if x not in modal else '' for x in words]
                 # translation
                 translate_list = [pinyin.cedict.translate_word(s)[0] + ' '
                                   if pinyin.cedict.translate_word(s)
-                                     and '[' not in pinyin.cedict.translate_word(s)[0] else ''
+                                     and '[' not in pinyin.cedict.translate_word(s)[0] else callg(s)
                                   for s in words_list]
                 translate_list2 = []
                 for k in translate_list:
