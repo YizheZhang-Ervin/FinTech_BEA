@@ -391,7 +391,14 @@ class TranslatorHandler(web.RequestHandler):
                                   if pinyin.cedict.translate_word(s)
                                      and '[' not in pinyin.cedict.translate_word(s)[0] else ''
                                   for s in words_list]
-                return ''.join(translate_list)
+                translate_list2 = []
+                for k in translate_list:
+                    ix = k.find('(')
+                    if ix != -1:
+                        translate_list2.append(k[:ix])
+                    else:
+                        translate_list2.append(k[:])
+                return ''.join(translate_list2)
 
         def pos_position_kw(sentence):
             words_pseg = pseg.cut(sentence)
@@ -400,7 +407,7 @@ class TranslatorHandler(web.RequestHandler):
 
             word_tag_l = [i + ' ' + j if i != "\u3000" or i != "\n" else '' for i, j in words_pseg]
             word_token_l = [str(a) + ' ' + str(b) + ' ' + str(c) for a, b, c in word_token]
-            if len(keywords)!=0:
+            if len(keywords) != 0:
                 keywords_l = [i for i in keywords]
             else:
                 keywords_l = 'Short Sentence, No Keywords Here'
