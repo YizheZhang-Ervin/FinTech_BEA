@@ -398,7 +398,7 @@ class TranslatorHandler(web.RequestHandler):
                         translate_list2.append(k[:ix])
                     else:
                         translate_list2.append(k[:])
-                return ''.join(translate_list2)
+                return ''.join(translate_list2).replace(' to', '')
 
         def pos_position_kw(sentence):
             words_pseg = pseg.cut(sentence)
@@ -411,7 +411,7 @@ class TranslatorHandler(web.RequestHandler):
                 keywords_l = [i for i in keywords]
             else:
                 keywords_l = 'Short Sentence, No Keywords Here'
-            print(len(keywords_l))
+            # print(len(keywords_l))
             return word_tag_l, word_token_l, keywords_l
 
         ta_translate = translator(ta_origin)
