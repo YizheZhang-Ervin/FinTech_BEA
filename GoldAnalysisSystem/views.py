@@ -398,7 +398,7 @@ class TranslatorHandler(web.RequestHandler):
                         translate_list2.append(k[:ix])
                     else:
                         translate_list2.append(k[:])
-                return ''.join(translate_list2).replace(' to', '')
+                return ''.join(translate_list2).replace(' to ', ' ')
 
         def pos_position_kw(sentence):
             words_pseg = pseg.cut(sentence)
