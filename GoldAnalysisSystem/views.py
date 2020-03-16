@@ -350,3 +350,65 @@ class pyjscmdHandler(web.RequestHandler):
 class webHandler(web.RequestHandler):
     def get(self):
         self.render('quickatt.html')
+
+
+class TranslatorHandler(web.RequestHandler):
+    def get(self):
+        self.render('translator.html', origin='', translate='', pos='', position='', keywords='')
+
+    def post(self):
+        ta_origin = self.get_body_argument('ta_origin', '')
+        import jieba
+        import pinyin.cedict
+        from jieba import posseg as pseg
+        from jieba import analyse
+
+        def is_number(s):
+            try:
+                float(s)
+                return True
+            except ValueError:
+                pass
+
+            try:
+                import unicodedata
+                unicodedata.numeric(s)
+                return True
+            except (TypeError, ValueError):
+                pass
+
+            return False
+
+        def translator(sentence):
+            if is_number(sentence):
+                return sentence
+            else:
+                # divide sentence
+                words = jieba.cut(sentence, cut_all=False)
+                words_list = [x for x in words]
+                # translation
+                translate_list = [pinyin.cedict.translate_word(s)[0] + ' '
+                                  if pinyin.cedict.translate_word(s)
+                                     and '[' not in pinyin.cedict.translate_word(s)[0] else ''
+                                  for s in words_list]
+                return ''.join(translate_list)
+
+        def pos_position_kw(sentence):
+            words_pseg = pseg.cut(sentence)
+            word_token = jieba.tokenize(sentence)
+            keywords = analyse.textrank(sentence, withWeight=True)
+
+            word_tag_l = [i + ' ' + j if i != "\u3000" or i != "\n" else '' for i, j in words_pseg]
+            word_token_l = [str(a) + ' ' + str(b) + ' ' + str(c) for a, b, c in word_token]
+            if len(keywords)!=0:
+                keywords_l = [i for i in keywords]
+            else:
+                keywords_l = 'Short Sentence, No Keywords Here'
+            print(len(keywords_l))
+            return word_tag_l, word_token_l, keywords_l
+
+        ta_translate = translator(ta_origin)
+        ta_other = pos_position_kw(ta_origin)
+
+        self.render('translator.html', origin=ta_origin, translate=ta_translate, pos=ta_other[0], position=ta_other[1],
+                    keywords=ta_other[2])

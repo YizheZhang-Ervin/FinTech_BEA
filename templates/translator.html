@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <title>BEA GVS Translator</title>
+  <meta charset="utf-8">
+  <link rel="shortcut icon" href="{{ static_url('img/homepage/favicon.ico') }}">
+  <style type="text/css">
+    body{
+        background-image:url({{ static_url('img/homepage/backgrounds/bg-part0.png') }});
+        height;100%"
+        }
+    .ta_in{
+        background: rgba(0,0,0,0.8);
+        color:gold;
+        font-size:18px;
+        grid-column:1/2;
+        grid-row:1/5;
+    }
+    .ta_out{
+        background: rgba(0,0,0,0.8);
+        color:gold;
+        font-size:18px;
+        grid-column:2/3;
+    }
+
+    nav{
+        position:sticky;
+        color:gold;
+        font-size:18px;
+        margin-bottom:2%;
+    }
+    a,p{
+        color:gold;
+        text-decoration:none;
+        font-size:19px;
+    }
+
+    .div_in_form{
+        display:grid;
+        grid-template-columns: 49.5% 49.5%;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        grid-row-gap: 1%;
+        grid-column-gap: 1%;
+        height:600px;
+    }
+
+  </style>
+  <script src="{{ static_url('js/preventhacker.js') }}"></script>
+</head>
+<body>
+    <nav>
+    <a href="/">Home</a> |
+    <a href="/translator/">Refresh</a>
+    </nav>
+    <div>
+        <p>Automatic Translation Between CN-EN</p>
+        <form action="/translator/" method="post">
+            <div class="div_in_form">
+                <textarea class="ta_in" name='ta_origin' placeholder="Type Chinese Here" onchange='this.form.submit()'>{{origin}}</textarea>
+                <textarea class="ta_out ta_o1" name='ta_translate' placeholder="Translate" readonly>{{translate}}</textarea>
+                <textarea class="ta_out ta_o2" name='ta_translate' placeholder="POS" readonly>{{pos}}</textarea>
+                <textarea class="ta_out ta_o2" name='ta_translate' placeholder="Position" readonly>{{position}}</textarea>
+                <textarea class="ta_out ta_o2" name='ta_translate' placeholder="Keywords" readonly>{{keywords}}</textarea>
+            </div>
+        </form>
+
+    </div>
+</body>
+</html>
