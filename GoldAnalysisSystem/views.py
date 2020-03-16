@@ -390,7 +390,6 @@ class TranslatorHandler(web.RequestHandler):
 
         def reverse_transfer(sentence):
             from translate import Translator
-            # 在任何两种语言之间，中文翻译成英文
             translator_ec = Translator(from_lang="english", to_lang="chinese")
             return translator_ec.translate(sentence)
 
@@ -405,10 +404,12 @@ class TranslatorHandler(web.RequestHandler):
                 # divide sentence
                 words = jieba.cut(sentence, cut_all=False)
                 words_list = [x if x not in modal else '' for x in words]
+                for i in range(words_list.count('')):
+                    words_list.remove('')
                 # translation
                 translate_list = [pinyin.cedict.translate_word(s)[0] + ' '
                                   if pinyin.cedict.translate_word(s)
-                                     and '[' not in pinyin.cedict.translate_word(s)[0] else callg(s)
+                                     and '[' not in pinyin.cedict.translate_word(s)[0] else callg(s)+' '
                                   for s in words_list]
                 translate_list2 = []
                 for k in translate_list:
