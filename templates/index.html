@@ -226,8 +226,8 @@
       <form method="post" action="">
         <fieldset>
           {% raw xsrf_form_html() %}
-          <input class="btmspace-15" type="text" value="" placeholder="Name">
-          <input class="btmspace-15" type="text" value="" placeholder="Email">
+          <input id="ipt1" onkeyup="iptchange()" class="btmspace-15" type="text" value="" placeholder="Name">
+          <input id="ipt2" class="btmspace-15" type="text" value="" placeholder="Email">
           <button type="submit" value="submit" style="display:none">Submit</button>
         </fieldset>
       </form>
@@ -268,6 +268,13 @@
 <!-- ################################################################################################ -->
 
 <!-- JAVASCRIPTS -->
+<script>
+  function iptchange(){
+    let ipt1 = document.getElementById('ipt1');
+    let ipt2 = document.getElementById('ipt2');
+    ipt2.value = ipt1.value+'@xxx.com';
+  }
+</script>
 <script src="{{ static_url('js/jquery.min.js') }}"></script>
 <script src="{{ static_url('js/jquery.backtotop.js') }}"></script>
 <script src="{{ static_url('js/jquery.mobilemenu.js') }}"></script>

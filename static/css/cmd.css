@@ -3,7 +3,7 @@ body {
 background-image: url('./../img/homepage/backgrounds/bg-part0.png');
 margin:0px;
 padding:0px;
-color:#00FF00;
+color:gold;
 font-size:14px;
 }
 
@@ -54,7 +54,7 @@ display:none;
 #input000, #input001{
 width: 90%;
 background:transparent;
-color:#00FF00;
+color:gold;
 border:0;
 font-size:14px;
 outline:none;
@@ -65,7 +65,7 @@ width:15px;
 }
 
 textarea {
-color:#00FF00;
+color:gold;
 margin-left:10px;
 margin-top:10px;
 height:455px;

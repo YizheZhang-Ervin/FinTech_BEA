@@ -48,7 +48,7 @@ function readText(fr, file) {
 window.onload = function () {
     ta1.addEventListener('keydown',submit.bind(null,ta1));
     ta1.addEventListener('keydown',history.bind(null,ta1));
-    ip001.addEventListener('change',computeDate);
+    ip001.addEventListener('keyup',computeDate);
     inputfile.addEventListener("change", loadfile);
 }
 
