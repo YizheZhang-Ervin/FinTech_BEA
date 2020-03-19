@@ -30,10 +30,11 @@ Run By Terminal:
 
 ## Data
 1. Trend Plots & Tables  
-    * Time-slicing  
-        days - 3months: API  
+    * Time-slicing
+        Days: Quandl API
+        1 Wweeks - 3months: Sqlite  
         6months - 12years: Sqlite  
     * DIY Plots: Sqlite  
-2. Animation: API  
-3. 3D Plots: API  
+2. Animation: Sqlite  
+3. 3D Plots: Sqlite  
 
