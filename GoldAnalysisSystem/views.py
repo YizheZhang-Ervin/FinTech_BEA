@@ -1,9 +1,7 @@
 import datetime
 import os
 import traceback
-
 import quandl
-from numpy.core.defchararray import isalpha, isalnum
 from tornado import web
 
 from GoldAnalysisSystem.database_handler import store_to_db
@@ -409,7 +407,7 @@ class TranslatorHandler(web.RequestHandler):
                 # translation
                 translate_list = [pinyin.cedict.translate_word(s)[0] + ' '
                                   if pinyin.cedict.translate_word(s)
-                                     and '[' not in pinyin.cedict.translate_word(s)[0] else callg(s)+' '
+                                     and '[' not in pinyin.cedict.translate_word(s)[0] else callg(s) + ' '
                                   for s in words_list]
                 translate_list2 = []
                 for k in translate_list:
@@ -439,3 +437,26 @@ class TranslatorHandler(web.RequestHandler):
 
         self.render('translator.html', origin=ta_origin, translate=ta_translate, pos=ta_other[0], position=ta_other[1],
                     keywords=ta_other[2])
+
+
+class MapHandler(web.RequestHandler):
+    def get(self):
+        self.render('map.html')
+
+
+class MapEmbedHandler(web.RequestHandler):
+    def get(self):
+        from pyecharts import options as opts
+        from pyecharts.charts import Map
+        from pyecharts.faker import Faker
+        c = (
+            Map()
+                .add("A", [list(z) for z in zip(Faker.country, Faker.values())], "world")
+                .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+                .set_global_opts(
+                title_opts=opts.TitleOpts(title="World-Map"),
+                visualmap_opts=opts.VisualMapOpts(),
+            )
+                .render("./templates/map_embed.html")
+        )
+        self.render('map_embed.html')

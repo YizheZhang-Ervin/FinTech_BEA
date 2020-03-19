@@ -1,3 +1,4 @@
+pyecharts
 translate
 googletrans
 pinyin
