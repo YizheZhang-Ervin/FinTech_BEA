@@ -38,3 +38,14 @@ Run By Terminal:
 2. Animation: Sqlite  
 3. 3D Plots: Sqlite  
 
+## Function
+Gold Price Visualization  
+JavaScript CMD  
+Python CMD  
+Sql CMD  
+Html CMD  
+Mirror  
+Translator  
+Web Parameter  
+World Map  
+Prevent Right Click  
